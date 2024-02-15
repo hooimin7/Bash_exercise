@@ -1,0 +1,93 @@
+import pandas as pd
+
+configfile: "config/config.yaml"
+
+
+sample_df = (pd.read_csv(config["samples"], sep ="\t", 
+    dtype={"sample_name":str, "fastq":str}).set_index("sample_name", drop=False))
+
+
+rule all:
+    input:
+        expand("results/01_called_variants/{sample}.vcf", 
+            sample=sample_df.sample_name)
+
+rule raw_fastqc:
+    input:
+        reads = lambda wildcards: sample_df.loc[wildcards.sample, "fastq"]
+    output:
+        "resources/fastqc_{sample}.html"
+    conda: "envs/fastqc.yaml"
+    shell:
+        "fastqc {input.reads} "
+
+rule trim:
+    input:
+        raw = rules.raw_fastqc.input.reads
+    output:
+        "resources/{sample}-trim.fastq"
+    conda: "envs/fastp.yaml"
+    shell:
+        "fastp -i {input.raw} -o {output}"
+
+rule trim_fastqc:
+    input:
+        trim = rules.trim.output
+    output:
+        "resources/fastqc_{sample}-trim.html"
+    conda: "envs/fastqc.yaml"
+    shell:
+        "fastqc {input.trim}"
+
+rule bowtie2_index:
+    input:
+        genome=config["genome"]
+    output:
+        multiext(config["genome"], 
+        ".1.bt2", ".2.bt2", ".3.bt2", ".4.bt2", ".rev.1.bt2", ".rev.2.bt2")
+    conda: "envs/bowtie2.yaml"
+    shell:
+        "bowtie2-build {input.genome} {input.genome}"
+
+rule map_reads:
+    input:
+        idx = rules.bowtie2_index.output,
+        trim_reads = rules.trim.output
+    output:
+        temp("results/00_mapped_reads/{sample}.unsorted.sam")
+    params:
+        idx = config["genome"]
+    conda: "envs/bowtie2.yaml"
+    shell:
+        "bowtie2 -x {params.idx} -U {input.trim_reads} -S {output}"
+
+rule sam_to_bam:
+    input:
+        rules.map_reads.output
+    output:
+        "results/00_mapped_reads/{sample}.bam"
+    threads: 8
+    conda: "envs/htslib.yaml"
+    shell:
+        "samtools sort -@ {threads} -o {output} {input}"
+
+rule index_bam:
+    input:
+        rules.sam_to_bam.output
+    output:
+        "results/00_mapped_reads/{sample}.bam.bai"
+    conda: "envs/htslib.yaml"
+    shell:
+        "samtools index {input}"
+
+rule call_variants:
+    input: 
+        rules.index_bam.output,
+        aligned_reads=rules.sam_to_bam.output,
+        genome=config["genome"]
+    output:
+        "results/01_called_variants/{sample}.vcf"
+    conda: "envs/htslib.yaml"
+    shell:
+        'bcftools mpileup -Ou -f {input.genome} {input.aligned_reads} | bcftools call -m -v > {output}'
+    

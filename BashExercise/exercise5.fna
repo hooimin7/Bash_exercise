@@ -1,0 +1,88 @@
+https://www.geeksforgeeks.org/awk-command-unixlinux-examples/
+awk ' BEGIN {print "Hello world"} '
+Hello world
+(base) [inf-51-2023@bioinf-biol302451 ~]$ awk ' BEGIN {print 4+5} '
+9
+(base) [inf-51-2023@bioinf-biol302451 ~]$ awk ' BEGIN {print sin (3.14/6)} '
+0.49977
+$ awk ' BEGIN {print sin(atan2(0, -1)/6)} '
+0.5
+(base) [inf-51-2023@bioinf-biol302451 ~]$ awk ' BEGIN {a=2+3; b=4/8; print a, b} '
+5 0.5
+$ awk ' BEGIN {OFS="xxxxx"; a=2+3; b=4/8; print a, b} '
+5xxxxx0.5
+(base) [inf-51-2023@bioinf-biol302451 ~]$ awk ' BEGIN {OFS="\n"; a=2+3; b=4/8; print a, b} '
+5
+0.5
+$ scp inf-51-2023@130.235.8.214:/resources/binp16/Data/regions.fna .
+$ awk ' /^>/ {print} ' regions.fna 
+$ awk ' /^>/ {print $0} ' regions.fna 
+>FPV3KKJ02CLYUT length=223
+>FPV3KKJ02CKYDF length=218
+>FPV3KKJ02CK9R8 length=243
+$ awk ' /^>/ {print $1} ' regions.fna
+>FPV3KKJ02CH2BS
+>FPV3KKJ02CFT7I
+>FPV3KKJ02CCKS5
+$ awk ' /^>FPV3KKJ01/ {countRegion1++} /^>FPV3KKJ02/ {countRegion2++} END {print countRegion1 ,countRegion2} ' regions.fna 
+2501 2500
+$ awk ' /^>FPV3KKJ01/ {countRegion1++} /^>FPV3KKJ02/ {countRegion2++} END {print "Region 1: "countRegion1"\n" "Region 2:", countRegion2} ' regions.fna 
+Region 1: 2501
+Region 2: 2500
+$ awk ' /^>/ {sub (">" ,"" ,$1) ; print $1} ' regions.fna 
+$ awk ' /^>/ {sub (">" ,"") ; print $1} ' regions.fna 
+FPV3KKJ02CCKSI
+FPV3KKJ02B8TIJ
+FPV3KKJ02CH2BM
+$ awk ' /^[^>]/ {gsub (/[AGC]/ ,"", $1) ; print $1} ' regions.fna 
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+$ awk ' /^[^>]/ {print length ($0)} ' regions.fna 
+217
+236
+230
+$ awk ' /^>/ {print} /^[^>]/ {print tolower($0)} ' regions.fna 
+>FPV3KKJ02CCKS5 length=223
+atacatagggtgcaagcgttgtccggaattattgggcgtaaagagctcgtaggtcgtttgtcgcgtcgattgtgaaaatctgaggctcaacctcagacctgcagtcgatacgggcaaactagagtgtggtaggggagactggaattcctggtgtagcggtggaatgcgcagatatcaggaggaacaccaatggcgaaggcaggtctctgggccataactgaca
+>FPV3KKJ01CKVDG length=223
+atacggagggtgcaagcgttgtccggatttattgggtttaaagggtgcgtaggcgggcctttaagtcagtggtgaaagcctgcagcttaactgtagaactgccattgatactggaggccttgagtgtactagaggtaggcggaatttatggtgtagcggtgaaatgcatagataccataaagaacaccgatagcgtaggcagcttactggagtacaactgacg
+awk ' /^>/ {print; next} {print tolower ($0)} ' regions.fna
+>FPV3KKJ02CCKS5 length=223
+atacatagggtgcaagcgttgtccggaattattgggcgtaaagagctcgtaggtcgtttgtcgcgtcgattgtgaaaatctgaggctcaacctcagacctgcagtcgatacgggcaaactagagtgtggtaggggagactggaattcctggtgtagcggtggaatgcgcagatatcaggaggaacaccaatggcgaaggcaggtctctgggccataactgaca
+>FPV3KKJ01CKVDG length=223
+atacggagggtgcaagcgttgtccggatttattgggtttaaagggtgcgtaggcgggcctttaagtcagtggtgaaagcctgcagcttaactgtagaactgccattgatactggaggccttgagtgtactagaggtaggcggaatttatggtgtagcggtgaaatgcatagataccataaagaacaccgatagcgtaggcagcttactggagtacaactgacg
+awk ' /^>/ {print} /^>/ {print tolower ($1)} ' regions.fna
+>FPV3KKJ02CFT7I length=217
+>fpv3kkj02cft7i
+>FPV3KKJ02CCKS5 length=223
+>fpv3kkj02ccks5
+>FPV3KKJ01CKVDG length=223
+>fpv3kkj01ckvdg
+awk ' /^>/ {idline=$1; sub (/length=/ ,"",$2) ; if ($2>=200 && $2<=250) {valid=1; print} else {valid=0}; next} {if (valid==1) {print}} ' regions.fna
+>FPV3KKJ02CCKS5 223
+ATACATAGGGTGCAAGCGTTGTCCGGAATTATTGGGCGTAAAGAGCTCGTAGGTCGTTTGTCGCGTCGATTGTGAAAATCTGAGGCTCAACCTCAGACCTGCAGTCGATACGGGCAAACTAGAGTGTGGTAGGGGAGACTGGAATTCCTGGTGTAGCGGTGGAATGCGCAGATATCAGGAGGAACACCAATGGCGAAGGCAGGTCTCTGGGCCATAACTGACA
+>FPV3KKJ01CKVDG 223
+ATACGGAGGGTGCAAGCGTTGTCCGGATTTATTGGGTTTAAAGGGTGCGTAGGCGGGCCTTTAAGTCAGTGGTGAAAGCCTGCAGCTTAACTGTAGAACTGCCATTGATACTGGAGGCCTTGAGTGTACTAGAGGTAGGCGGAATTTATGGTGTAGCGGTGAAATGCATAGATACCATAAAGAACACCGATAGCGTAGGCAGCTTACTGGAGTACAACTGACG
+➜  ~ awk ' BEGIN {FS=":";RS=";"} {print NR, $1+$2+$3} END {print "Data from "FILENAME} ' listOfItems.txt
+1 240
+2 240
+3 4
+4 1055
+Data from listOfItems.txt
+
+remove line break using AWK
+https://serverfault.com/questions/391360/remove-line-break-using-awk
+
+~ awk ' {nc = nc + length ($0) + 1} END {print NR, "lines,", nc, "characters"} ' list3.txt
+5001 lines, 100020 characters
+
+count row/lines
+https://www.unix.com/shell-programming-and-scripting/243138-print-nth-line-file.html
+
+GC content AWK
+https://www.biostars.org/p/300870/
+
+AWK handbook
+https://www.gnu.org/software/gawk/manual/gawk.html

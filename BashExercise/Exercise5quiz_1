@@ -1,0 +1,17 @@
+Question 1a
+~ awk ' /^>/ {idline=$1; sub (/length=/ ,"",$2) (n += $2)} END {print n} ' regions.fna
+1122127
+
+Question 1b
+awk ' /^[^>]/ {print} ' regions.fna
+~ awk ' /^[^>]/ {print} ' regions.fna > file1.fna
+ ~ awk ' BEGIN {RS=""}{gsub (/\n/, "" , $0)} {print $0} ' file1.fna > file2.fna
+ awk ' {print NR, $0} ' file2.fna
+  ~ awk ' {print $1, length ($1)} ' file2.fna
+   ~ awk ' {print length ($1)} ' file2.fna
+1122127
+Get the same result 1122127
+
+Question 1 (online)
+ ➜  ~ awk ' $2 > maxrate {maxrate = $2; maxemp = $1} END {print "length of the longest seq:" , maxrate , "for" , maxemp} ' regions.fna
+length of the longest seq: length=272 for >FPV3KKJ02CF34D

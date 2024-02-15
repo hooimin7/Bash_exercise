@@ -1,0 +1,133 @@
+1. Try running the above code. Do so by running snakemake in the example_workflow directory. What error do you get? Once you fix the
+first error, what does the second one mean?
+First error: cores have to be specified for local execution (use --cores N with N being a number >= 1 or 'all')
+snakemake --cores 1 
+Second error: MissingInputException in rule first in file /Users/med-snt/example_workflow/Snakefile, line 5: 
+Missing input files for rule first:
+    output: s1.1
+    affected files:
+        s1.0
+what does this error mean?
+# The first error is because we have not specified the number of cores to use.
+# The second error is because we have not specified the input file for the rule first.
+2 Add the missing file by touching it. What happens if you run snakemake
+-n? Try re-running the workflow. What happens?
+I created s1.0. The -n flag is used to perform a dry run, which means that Snakemake will
+snakemake -n 
+Building DAG of jobs...
+Job stats:
+job       count
+------  -------
+all           1
+first         1
+second        1
+total         3
+
+Execute 1 jobs...
+
+[Thu Jan 25 11:59:59 2024]
+localrule first:
+    input: s1.0
+    output: s1.1
+    jobid: 2
+    reason: Missing output files: s1.1
+    resources: tmpdir=<TBD>
+
+Execute 1 jobs...
+
+[Thu Jan 25 11:59:59 2024]
+localrule second:
+    input: s1.1
+    output: s1.2
+    jobid: 1
+    reason: Missing output files: s1.2; Input files updated by another job: s1.1
+    resources: tmpdir=<TBD>
+
+Execute 1 jobs...
+
+[Thu Jan 25 11:59:59 2024]
+localrule all:
+    input: s1.2
+    jobid: 0
+    reason: Input files updated by another job: s1.2
+    resources: tmpdir=<TBD>
+
+Job stats:
+job       count
+------  -------
+all           1
+first         1
+second        1
+total         3
+
+Reasons:
+    (check individual jobs above for details)
+    input files updated by another job:
+        all, second
+    missing output files:
+        first, second
+
+This was a dry-run (flag -n). The order of jobs does not reflect the order of execution.
+3. Try running the workflow again. What happens? What happens if you
+remove or touch s1.1, and try re-running it?
+touch s1.1
+snakemake --cores 1
+4. Using what you’ve learned above regarding wildcards, update this work-
+flow to be able to handle generating any file ending in .2, including the
+intermediate step as in the workflow above. Use this updated workflow
+to generate my_first_workflow.2 by running snakemake. Also use it
+to generate manual_target.2 by running snakemake manual_target.2.
+Remember that you must first generate the necessary input files manually.
+touch my_first_workflow.0
+rule all:
+        input:
+                'my_first_workflow.2'
+
+rule first:
+        input:
+                '{sample}.0'
+        output:
+                '{sample}.1'
+        shell:
+                'touch {output} '
+
+rule second:
+        input:
+                '{sample}.1'
+        output:
+                '{sample}.2'
+        shell:
+                'touch {output} '
+snakemake --core 2 # run the workflow
+my_first_workflow.0 my_first_workflow.1 my_first_workflow.2 s1.0
+
+SAMPLE, = glob_wildcards('my_first_workflow.{sample}')
+5. Update the above workflow to use glob_wildcards or a tsv file to identify
+which files should be generated. Explain what effect calling expand in
+other rules than all has on this workflow. (Comparing dry-run outputs
+for different workflows with multiple targets may be helpful here.)
+mv my_first_workflow.2 my_first_workflow.2.txt
+snakemake --cores 2
+SAMPLE, = glob_wildcards('my_first_workflow.{sample}')
+
+SAMPLE, = glob_wildcards('{sample}.0')
+
+rule all:
+        input:
+                expand('{sample}.2', sample=SAMPLE)
+
+rule first:
+        input:
+                '{sample}.0'
+        output:
+                '{sample}.1'
+        shell:
+                'touch {output} '
+
+rule second:
+        input:
+                '{sample}.1'
+        output:
+                '{sample}.2'
+        shell:
+                'touch {output} '

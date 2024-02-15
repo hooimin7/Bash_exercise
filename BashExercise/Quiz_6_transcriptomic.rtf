@@ -1,0 +1,1030 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 sizeFactors(dds)\
+Pca_Ribes_rep1  Pca_Ribes_rep2  Pca_Ribes_rep3  Pca_Ribes_rep4  Pca_Ribes_rep5  Pca_Ribes_rep6  Pca_Ribes_rep7  Pca_Ribes_rep8 \
+      0.8630273       0.7834657       0.8745464       1.3164979       1.0952945       1.2201038       0.6589952       0.7229116 \
+ Pca_Ribes_rep9  Pca_Salix_rep1  Pca_Salix_rep2  Pca_Salix_rep3  Pca_Salix_rep4  Pca_Salix_rep5  Pca_Salix_rep6  Pca_Salix_rep7 \
+      0.5084469       0.8648081       0.9674530       1.5331038       0.9743454       0.8221361       1.4013334       1.0288940 \
+ Pca_Salix_rep8  Pca_Salix_rep9 Pca_Urtica_rep1 Pca_Urtica_rep2 Pca_Urtica_rep3 Pca_Urtica_rep4 Pca_Urtica_rep5 Pca_Urtica_rep6 \
+      0.6923997       0.6714817       1.4183750       1.6818999       1.4051836       1.6466206       1.3068322       1.1053697 \
+Pca_Urtica_rep7 Pca_Urtica_rep8 Pca_Urtica_rep9 \
+      1.5735130       0.9652796       0.8897406 \
+\
+\
+function (object, ...) \
+standardGeneric("estimateSizeFactors")\
+<bytecode: 0x7ff622a52c68>\
+<environment: 0x7ff622a4fde8>\
+Methods may be defined for arguments: object\
+Use  showMethods(estimateSizeFactors)  for currently available ones.\
+> sizeFactors\
+standardGeneric for "sizeFactors" defined from package "BiocGenerics"\
+\
+function (object, ...) \
+standardGeneric("sizeFactors")\
+<bytecode: 0x7ff6199fbd60>\
+<environment: 0x7ff619a28410>\
+Methods may be defined for arguments: object\
+Use  showMethods(sizeFactors)  for currently available ones.\
+> showMethods(sizeFactors) \
+Function: sizeFactors (package BiocGenerics)\
+object="DESeqDataSet"\
+\
+> # Take a look at the size factors\
+> sizeFactors(dds) # Check the size factors\
+      fh1       fh2       fh3      ref1      ref2      ref3 \
+2.1100351 0.7052493 0.7021197 2.1686521 0.7170036 0.7116748 \
+> # 16. Based on the size factor calculated for fh1, were read counts in this sample systematically lower or\
+> # higher than expected? What other characteristic of fh1 (and ref1) would hint at this answer?\
+> # Answer: the size factor for fh1 is higher than others, which we have seen this \
+> # on the coverage reads (multiQc hmtl after trimmed)\
+> # fh1       fh2       fh3      ref1      ref2      ref3 \
+> # 2.1100351 0.7052493 0.7021197 2.1686521 0.7170036 0.7116748 \
+> # normalized counts\
+> normalized_counts <- as.data.frame(counts(dds, normalized=TRUE))\
+> head(normalized_counts)\
+                     fh1       fh2      fh3       ref1      ref2     ref3\
+CE100114_10434 8.0567381 14.179382 7.121293 10.6056658 13.946931 8.430817\
+CE100464_580   0.0000000  1.417938 0.000000  0.4611159  2.789386 1.405136\
+CE100520_1543  3.3174804  0.000000 2.848517  3.2278113  5.578772 0.000000\
+CE100533_337   0.4739258  2.835876 0.000000  0.9222318  0.000000 0.000000\
+CE100719_908   0.4739258  0.000000 2.848517  1.3833477  1.394693 0.000000\
+CE101042_51    0.4739258  0.000000 0.000000  0.4611159  0.000000 0.000000\
+> head(count_mat) # Check\
+               fh1 fh2 fh3 ref1 ref2 ref3\
+CE100114_10434  17  10   5   23   10    6\
+CE100464_580     0   1   0    1    2    1\
+CE100520_1543    7   0   2    7    4    0\
+CE100533_337     1   2   0    2    0    0\
+CE100719_908     1   0   2    3    1    0\
+CE101042_51      1   0   0    1    0    0\
+> # fh1       fh2      fh3       ref1      ref2     ref3\
+> # CE100114_10434 8.0567381 14.179382 7.121293 10.6056658 13.946931 8.430817\
+> # CE100464_580   0.0000000  1.417938 0.000000  0.4611159  2.789386 1.405136\
+> # CE100520_1543  3.3174804  0.000000 2.848517  3.2278113  5.578772 0.000000\
+> # CE100533_337   0.4739258  2.835876 0.000000  0.9222318  0.000000 0.000000\
+> # CE100719_908   0.4739258  0.000000 2.848517  1.3833477  1.394693 0.000000\
+> # CE101042_51    0.4739258  0.000000 0.000000  0.4611159  0.000000 0.000000\
+> # alternatively\
+> normalized_counts %>% View()\
+> # the %>% symbolizes a pipe in R using the magrittr package, similar to | in bash\
+> # basic statistics for each sample\
+> summary(normalized_counts)\
+      fh1                fh2                fh3                ref1               ref2               ref3         \
+ Min.   :   0.000   Min.   :   0.000   Min.   :   0.000   Min.   :   0.000   Min.   :   0.000   Min.   :   0.000  \
+ 1st Qu.:   0.000   1st Qu.:   0.000   1st Qu.:   0.000   1st Qu.:   0.000   1st Qu.:   0.000   1st Qu.:   0.000  \
+ Median :   1.422   Median :   1.418   Median :   1.424   Median :   1.383   Median :   1.395   Median :   1.405  \
+ Mean   :   6.891   Mean   :   6.809   Mean   :   6.846   Mean   :   6.687   Mean   :   6.736   Mean   :   6.799  \
+ 3rd Qu.:   5.687   3rd Qu.:   5.672   3rd Qu.:   5.697   3rd Qu.:   5.995   3rd Qu.:   5.579   3rd Qu.:   5.620  \
+ Max.   :1252.112   Max.   :1213.755   Max.   :1231.984   Max.   :1138.956   Max.   :1030.678   Max.   :1131.135  \
+> # PCA is a technique used to emphasize variation and bring out strong patterns in the data.\
+> # PCA:biological replicates belonging to the same experimental group to cluster together\
+> # Hierarchical clustering also groups samples by expression similarity.\
+> # A hierarchical tree indicates which samples are more similar to each other based on the normalized gene expression values\
+> # A heatmap is used to show the correlation of gene expression for all pairwise combinations of samples in the data\
+> # 6.4.1 Transformation\
+> # unsupervised clustering methods such as PCA and hierarchical clustering are sensitive to the\
+> # magnitude of the data ,transformation of the normalized counts improves the estimated correlations \
+> # or distances between samples or genes for visualization.\
+> # Transform the data using regularized log transformation\
+> rld <- rlog(dds, blind=TRUE)\
+> View(rld)\
+> # if conditions are expected to be VERY different in their total counts, it is a good idea to change this to blind == FALSE.\
+> # 6.4.2 Principal component analysis\
+> # Create a PCA using the DESeq2 function plotPCA()\
+> # 500 most variable genes, which is the default value for the ntop option within the plotPCA() function\
+> # PCA plot\
+> DESeq2::plotPCA(rld, intgroup=c("condition"), ntop = 500)\
+> # Save to a pdf using the pdf() device.\
+> pdf("05_DiffExpr/fig1.pca.pdf")\
+Error in pdf("05_DiffExpr/fig1.pca.pdf") : \
+  cannot open file '05_DiffExpr/fig1.pca.pdf'\
+> # PCA is a technique used to emphasize variation and bring out strong patterns in the data.\
+> # PCA:biological replicates belonging to the same experimental group to cluster together\
+> # Hierarchical clustering also groups samples by expression similarity.\
+> # A hierarchical tree indicates which samples are more similar to each other based on the normalized gene expression values\
+> # A heatmap is used to show the correlation of gene expression for all pairwise combinations of samples in the data\
+> # 6.4.1 Transformation\
+> # unsupervised clustering methods such as PCA and hierarchical clustering are sensitive to the\
+> # magnitude of the data ,transformation of the normalized counts improves the estimated correlations \
+> # or distances between samples or genes for visualization.\
+> # Transform the data using regularized log transformation\
+> rld <- rlog(dds, blind=TRUE) # blind=TRUE to avoid using the condition information\
+> # if conditions are expected to be VERY different in their total counts, it is a good idea to change this to blind == FALSE.\
+> # 6.4.2 Principal component analysis\
+> # Create a PCA using the DESeq2 function plotPCA()\
+> # 500 most variable genes, which is the default value for the ntop option within the plotPCA() function\
+> # PCA plot\
+> DESeq2::plotPCA(rld, intgroup=c("condition"), ntop = 500)\
+> # Save to a pdf using the pdf() device.\
+> pdf("05_DiffExpr/fig1.pca.pdf")\
+Error in pdf("05_DiffExpr/fig1.pca.pdf") : \
+  cannot open file '05_DiffExpr/fig1.pca.pdf'\
+> DESeq2::plotPCA(rld, intgroup=c("condition"), ntop = 500)\
+> # remember the default for ntop is 500,\
+> # so the results would be the same if you left this out\
+> dev.off()\
+null device \
+          1 \
+> # PCA is a technique used to emphasize variation and bring out strong patterns in the data.\
+> # PCA:biological replicates belonging to the same experimental group to cluster together\
+> # Hierarchical clustering also groups samples by expression similarity.\
+> # A hierarchical tree indicates which samples are more similar to each other based on the normalized gene expression values\
+> # A heatmap is used to show the correlation of gene expression for all pairwise combinations of samples in the data\
+> # 6.4.1 Transformation\
+> # unsupervised clustering methods such as PCA and hierarchical clustering are sensitive to the\
+> # magnitude of the data ,transformation of the normalized counts improves the estimated correlations \
+> # or distances between samples or genes for visualization.\
+> # Transform the data using regularized log transformation\
+> rld <- rlog(dds, blind=TRUE) # blind=TRUE to avoid using the condition information\
+> # if conditions are expected to be VERY different in their total counts, it is a good idea to change this to blind == FALSE.\
+> # 6.4.2 Principal component analysis\
+> # Create a PCA using the DESeq2 function plotPCA()\
+> # 500 most variable genes, which is the default value for the ntop option within the plotPCA() function\
+> # PCA plot\
+> DESeq2::plotPCA(rld, intgroup=c("condition"), ntop = 500) # intgroup is the grouping variable\
+> # Save to a pdf using the pdf() device.\
+> pdf("05_DiffExpr/fig1.pca.pdf") # open the pdf device\
+Error in pdf("05_DiffExpr/fig1.pca.pdf") : \
+  cannot open file '05_DiffExpr/fig1.pca.pdf'\
+> DESeq2::plotPCA(rld, intgroup=c("condition"), ntop = 500) # remember the default for ntop is 500,\
+> # Save to a pdf using the pdf() device.\
+> pdf("05_DiffExpr/fig1.pca.pdf") # open the pdf device\
+Error in pdf("05_DiffExpr/fig1.pca.pdf") : \
+  cannot open file '05_DiffExpr/fig1.pca.pdf'\
+> DESeq2::plotPCA(rld, intgroup=c("condition"), ntop = 500) # remember the default for ntop is 500,\
+> # so the results would be the same if you left this out\
+> # remember the default for ntop is 500,\
+> # so the results would be the same if you left this out\
+> dev.off() # close the pdf device\
+null device \
+          1 \
+> DESeq2::plotPCA(rld, intgroup=c("condition"), ntop = 500) # intgroup is the grouping variable\
+> # Save to a pdf using the pdf() device.\
+> pdf("05_DiffExpr/fig1.pca.pdf") # open the pdf device\
+Error in pdf("05_DiffExpr/fig1.pca.pdf") : \
+  cannot open file '05_DiffExpr/fig1.pca.pdf'\
+> DESeq2::plotPCA(rld, intgroup=c("condition"), ntop = 500) # remember the default for ntop is 500,\
+> # so the results would be the same if you left this out\
+> # remember the default for ntop is 500,\
+> # so the results would be the same if you left this out\
+> dev.off() # close the pdf device\
+null device \
+          1 \
+> # Save to a pdf using the pdf() device.\
+> pdf("05_DiffExpr/fig1.pca.pdf") # open the pdf device\
+> DESeq2::plotPCA(rld, intgroup=c("condition"), ntop = 500) # remember the default for ntop is 500,\
+> # so the results would be the same if you left this out\
+> # remember the default for ntop is 500,\
+> # so the results would be the same if you left this out\
+> dev.off() # close the pdf device\
+null device \
+          1 \
+> # 6.4.3 Hierarchical clustering\
+> # visualize which samples cluster together when using all of the filtered, normalized and\
+> # transformed expression data\
+> # creating a distance matrix among samples using stats::dist().\
+> distsRL <- dist(t(assay(rld)))\
+> mat <- as.matrix(distsRL)\
+> # rename the columns and rows of the matrix with the column names from the dds\
+> rownames(mat) <- colnames(mat) <- with(colData(dds),\
++                                        paste(condition, sampleNames, sep=" : "))\
+> # clustering analysis on the samples using the function stats::hclust()\
+> stats::hclust()\
+Error in stats::hclust() : argument "d" is missing, with no default\
+> # clustering analysis on the samples using the function stats::hclust()\
+> hc <- hclust(distsRL)\
+> # Visualize the distance between samples using a heatmap\
+> # show the clustering of samples using a dendrogram\
+> install.packages("ComplexHeatmap")\
+Warning in install.packages :\
+  package \'91ComplexHeatmap\'92 is not available for this version of R\
+\
+A version of this package for your version of R might be available elsewhere,\
+see the ideas at\
+https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages\
+> hmcol <- colorRampPalette(brewer.pal(9, "GnBu"))(100)\
+> # Plot the heatmap\
+> heatmap.2(mat,\
++           Rowv=as.dendrogram(hc),\
++           symm=TRUE,\
++           trace="none",\
++           col = rev(hmcol),\
++           margin=c(13, 13))\
+> # save the heatmap with the pdf() device\
+> pdf("05_DiffExpr/fig2.heatmap.pdf")\
+> heatmap.2(mat,\
++           Rowv=as.dendrogram(hc),\
++           symm=TRUE,\
++           trace="none",\
++           col = rev(hmcol),\
++           margin=c(13, 13))\
+> dev.off()\
+RStudioGD \
+        2 \
+> ##\
+> # The heatmap also shows that the samples cluster by condition.\
+> # 6.5 Differential expression\
+> # we have checked the quality of our samples to see if they fit the expectation of our experimental design\
+> # have checked our samples for outliers and explored patterns using dimension reduction and clustering\
+> # conduct differential expression analysis\
+> # run the actual analysis, we use the function DESeq().\
+> # It performs the normalization of the counts using the size factors, estimates dispersion, and fits the linear\
+> # model\
+> # Use the assign arrow(<-) to replace the old dds object with the newly fitted object\
+> # Run the analysis\
+> dds <- DESeq(dds)\
+using pre-existing size factors\
+estimating dispersions\
+gene-wise dispersion estimates\
+mean-dispersion relationship\
+-- note: fitType='parametric', but the dispersion trend was not well captured by the\
+   function: y = a/x + b, and a local regression fit was automatically substituted.\
+   specify fitType='local' or 'mean' to avoid this message next time.\
+final dispersion estimates\
+fitting model and testing\
+> # function: y = a/x + b, and a local regression fit was automatically substituted.\
+> # specify fitType='local' or 'mean' to avoid this message next time.\
+> # final dispersion estimates\
+> # fitting model and testing\
+> # 6.5.1 Identifying DE genes\
+> # With DESeq2, the Wald test is commonly used for hypothesis testing when comparing two groups\
+> # To indicate to DESEq2 the two groups we want to compare, we provide contrasts, or \
+> # the specific pair of groups we want to test\
+> # we have to check what contrasts are possible given our data and design formula\
+> # check what contrasts are even possible\
+> DESeq2::resultsNames(dds)\
+[1] "Intercept"              "condition_rich_vs_poor"\
+> # Extract the results for Poor vs. Rich\
+> # specify the contrast by naming the factor you want to test and\
+> # the levels of the factor you want to compare.\
+> contrast_pr <- c("condition", "poor", "rich")\
+> # extract the results for your specified contrast\
+> res_table <- results(dds, contrast=contrast_pr)\
+> \
+> # alternatively you could use:\
+> # alternatively you could use:\
+> # res_table <- results(dds, name = "condition_rich_vs_poor")\
+> # Wald test statistic is computed per-gene, and evaluates the probability that a test statistic at least as\
+> # extreme as the observed value would occur at at random\
+> # We reject the null hypothesis (i.e. there is no difference in expression between groups) and conclude \
+> # a gene is differentially expressed when the calculated p-value is below our significance threshold \
+> # (usually 0.05).\
+> # sort results based on significance\
+> res_table <- res_table[order(res_table$padj),]\
+> # You will now have the smallest padj values at the top of your table\
+> head(res_table)\
+log2 fold change (MLE): condition poor vs rich \
+Wald test p-value: condition poor vs rich \
+DataFrame with 6 rows and 6 columns\
+                                           baseMean log2FoldChange     lfcSE      stat       pvalue         padj\
+                                          <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>\
+fgenesh1_kg.12__183__Locus432v1rpkm387.16   588.740        3.86140 0.1208459   31.9531 4.88813e-224 3.28629e-220\
+estExt_Genemark1.C_130215                   386.051        5.25702 0.1950922   26.9463 6.30090e-160 2.11805e-156\
+fgenesh1_kg.7__381__Locus862v1rpkm207.81    222.891        6.19791 0.3318836   18.6750  7.91533e-78  1.77383e-74\
+fgenesh1_kg.23__105__Locus2331v1rpkm69.56   143.510       -3.02321 0.1832531  -16.4975  3.82638e-61  6.43119e-58\
+fgenesh1_kg.21__184__Locus30v1rpkm2293.91   609.877       -1.45415 0.0890015  -16.3385  5.25582e-60  7.06697e-57\
+e_gw1.29.217.1                              147.326        2.23810 0.1605483   13.9404  3.60119e-44  4.03513e-41\
+> # Extract the results for Poor vs. Rich\
+> # specify the contrast by naming the factor you want to test and\
+> # the levels of the factor you want to compare.\
+> contrast_pr <- c("condition", "poor", "rich")\
+> # extract the results for your specified contrast\
+> res_table <- results(dds, contrast=contrast_pr)\
+> # alternatively you could use:\
+> # res_table <- results(dds, name = "condition_rich_vs_poor")\
+> # Wald test statistic is computed per-gene, and evaluates the probability that a test statistic at least as\
+> # extreme as the observed value would occur at at random\
+> # We reject the null hypothesis (i.e. there is no difference in expression between groups) and conclude \
+> # a gene is differentially expressed when the calculated p-value is below our significance threshold \
+> # (usually 0.05).\
+> # sort results based on significance\
+> res_table <- res_table[order(res_table$padj),]\
+> # You will now have the smallest padj values at the top of your table\
+> head(res_table)\
+log2 fold change (MLE): condition poor vs rich \
+Wald test p-value: condition poor vs rich \
+DataFrame with 6 rows and 6 columns\
+                                           baseMean log2FoldChange     lfcSE      stat       pvalue         padj\
+                                          <numeric>      <numeric> <numeric> <numeric>    <numeric>    <numeric>\
+fgenesh1_kg.12__183__Locus432v1rpkm387.16   588.740        3.86140 0.1208459   31.9531 4.88813e-224 3.28629e-220\
+estExt_Genemark1.C_130215                   386.051        5.25702 0.1950922   26.9463 6.30090e-160 2.11805e-156\
+fgenesh1_kg.7__381__Locus862v1rpkm207.81    222.891        6.19791 0.3318836   18.6750  7.91533e-78  1.77383e-74\
+fgenesh1_kg.23__105__Locus2331v1rpkm69.56   143.510       -3.02321 0.1832531  -16.4975  3.82638e-61  6.43119e-58\
+fgenesh1_kg.21__184__Locus30v1rpkm2293.91   609.877       -1.45415 0.0890015  -16.3385  5.25582e-60  7.06697e-57\
+e_gw1.29.217.1                              147.326        2.23810 0.1605483   13.9404  3.60119e-44  4.03513e-41\
+> # function: y = a/x + b, and a local regression fit was automatically substituted.\
+> # specify fitType='local' or 'mean' to avoid this message next time.\
+> # final dispersion estimates\
+> # fitting model and testing\
+> # 6.5.1 Identifying DE genes\
+> # With DESeq2, the Wald test is commonly used for hypothesis testing when comparing two groups\
+> # To indicate to DESEq2 the two groups we want to compare, we provide contrasts, or \
+> # the specific pair of groups we want to test\
+> # we have to check what contrasts are possible given our data and design formula\
+> # check what contrasts are even possible\
+> DESeq2::resultsNames(dds)\
+[1] "Intercept"              "condition_rich_vs_poor"\
+> # The column headers are:\
+> #   \'95 baseMean: mean of normalized counts for all samples\
+> # \'95 log2FoldChange: log2 fold change\
+> # \'95 lfcSE: standard error of log2 fold change\
+> # \'95 stat: the Wald test statistic\
+> # \'95 pval: Wald test p-value\
+> # \'95 padj: Benjamini-Hochberg (BH) adjusted p-values\
+> # write your results into a separate file and save them to your computer\
+> # first convert the rownames to the first column of the dataframe so that\
+> # when we write it out to a table, we have our gene names as well.\
+> gene_id = rownames(res_table)\
+> res_table <- cbind(gene_id , data.frame(res_table, row.names=NULL))\
+> # write the result table in a file.\
+> write.table(res_table , file = "05_DiffExpr/diffExpr.tab", sep = "\\t", quote = FALSE,\
++             row.names = FALSE)\
+> # Adjusting the p-values to account for testing multiple genes helps us to have more confidence in our conclusions.\
+> # can use log2 fold change (LFC), to identify DE genes\
+> # common threshold is an absolute LFC of 1, which means expression of that gene is twice as much in one of the conditions compared\
+> # to the other\
+> # If you just want a list of the genes that have an adjusted p-value cutoff below a certain threshold and above\
+> # an absolute log fold change threshold, we can easily subset the results table. Here we will use thresholds of\
+> # padj < 0.05 and log2FoldChange < -1 or log2FoldChange > 1.\
+> resSig <- subset(res_table , padj < 0.05 & abs(log2FoldChange) > 1)\
+> write.table(resSig, file = "05_DiffExpr/diffExpr.sig05.tab", sep = "\\t", quote = FALSE,\
++             row.names = FALSE)\
+> # significantly differentially expressed genes had a negative log2FoldChange \
+> # and how many had a positive log2FoldChange.\
+> # call genes with a positive log2FoldChange as \'93upregulated\'94 and genes with \
+> # a negative log2FoldChange as downregulated\
+> # identify genes that are "upregulated" in group 1 relative to group 2\
+> resSig_upreg <- rownames(resSig)[resSig$log2FoldChange > 0]\
+> length(resSig_upreg)\
+[1] 116\
+> # [1] 116\
+> # identify genes that are "downregulated" in group 1 relative to group 2\
+> resSig_downreg <- rownames(resSig)[resSig$log2FoldChange < 0]\
+> length(resSig_downreg)\
+[1] 156\
+> e_gw1.29.217.1                              147.326        2.23810 0.1605483   13.9404  3.60119e-44  4.03513e-41### [1] 116\
+Error: unexpected numeric constant in "e_gw1.29.217.1                              147.326"\
+> # significantly differentially expressed genes had a negative log2FoldChange \
+> # and how many had a positive log2FoldChange.\
+> # call genes with a positive log2FoldChange as \'93upregulated\'94 and genes with \
+> # a negative log2FoldChange as downregulated\
+> # identify genes that are "upregulated" in group 1 relative to group 2\
+> resSig_upreg <- rownames(resSig)[resSig$log2FoldChange > 0]\
+> length(resSig_upreg)\
+[1] 116\
+> # [1] 116\
+> # identify genes that are "downregulated" in group 1 relative to group 2\
+> resSig_downreg <- rownames(resSig)[resSig$log2FoldChange < 0]\
+> length(resSig_downreg)\
+[1] 156\
+> # [1] 156\
+> # What does a positive or negative log2FoldChange actually mean for this comparison?\
+> # Positive log2FoldChange: Upregulated in "poor" compared to "rich."\
+> # Negative log2FoldChange: Downregulated in "poor" compared to "rich."\
+> # The log2FoldChange is the log2 of the fold change, which is the ratio of the normalized counts in the two groups.\
+> # A positive log2FoldChange means that the normalized counts in the first group are higher than the normalized counts in the second group.\
+> # A negative log2FoldChange means that the normalized counts in the second group are higher than the normalized counts in the first group.\
+> # 6.5.2 Visualizing DE Genes\
+> # 6.5.2.1 Individual genes\
+> # the gene that is most differentially expressed (i.e., lowest padj) in the sorted results table using head().\
+> head(resSig, 1)\
+                                    gene_id baseMean log2FoldChange     lfcSE     stat        pvalue          padj\
+1 fgenesh1_kg.12__183__Locus432v1rpkm387.16 588.7405       3.861403 0.1208459 31.95313 4.888133e-224 3.286292e-220\
+> # gene_id baseMean log2FoldChange     lfcSE     stat        pvalue          padj\
+> # 1 fgenesh1_kg.12__183__Locus432v1rpkm387.16 588.7405       3.861403 0.1208459 31.95313 4.888133e-224 3.286292e-220\
+> # Is it up or down-regulated in P. involutus on poor nutrient media relative to rich nutrient media?\
+> plotCounts(dds, gene="fgenesh1_kg.12__183__Locus432v1rpkm387.16", intgroup="condition")\
+> # gene_id baseMean log2FoldChange     lfcSE     stat        pvalue          padj\
+> # 1 fgenesh1_kg.12__183__Locus432v1rpkm387.16 588.7405       3.861403 0.1208459 31.95313 4.888133e-224 3.286292e-220\
+> # Is it up or down-regulated in P. involutus on poor nutrient media relative to rich nutrient media?\
+> plotCounts(dds, gene="fgenesh1_kg.12__183__Locus432v1rpkm387.16", intgroup="condition")\
+> tail(resSig, 1) # 1 = the last row)\
+           gene_id baseMean log2FoldChange    lfcSE      stat      pvalue       padj\
+380 e_gw1.42.105.1 5.434032      -2.374556 0.794699 -2.987995 0.002808146 0.04968201\
+> # gene_id baseMean log2FoldChange     lfcSE     stat        pvalue          padj\
+> # 1 fgenesh1_kg.12__183__Locus432v1rpkm387.16 588.7405       3.861403 0.1208459 31.95313 4.888133e-224 3.286292e-220\
+> # Is it up or down-regulated in P. involutus on poor nutrient media relative to rich nutrient media?\
+> plotCounts(dds, gene="fgenesh1_kg.12__183__Locus432v1rpkm387.16", intgroup="condition")\
+> tail(resSig, 1) # 1 = the last row)\
+           gene_id baseMean log2FoldChange    lfcSE      stat      pvalue       padj\
+380 e_gw1.42.105.1 5.434032      -2.374556 0.794699 -2.987995 0.002808146 0.04968201\
+> # [1] 156\
+> # What does a positive or negative log2FoldChange actually mean for this comparison?\
+> # Positive log2FoldChange: Upregulated in "poor" compared to "rich."\
+> # Negative log2FoldChange: Downregulated in "poor" compared to "rich."\
+> # The log2FoldChange is the log2 of the fold change, which is the ratio of the normalized counts in the two groups.\
+> # A positive log2FoldChange means that the normalized counts in the first group are higher than the normalized counts in the second group.\
+> # A negative log2FoldChange means that the normalized counts in the second group are higher than the normalized counts in the first group.\
+> # 6.5.2 Visualizing DE Genes\
+> # 6.5.2.1 Individual genes\
+> # the gene that is most differentially expressed (i.e., lowest padj) in the sorted results table using head().\
+> head(resSig, 1) # 1 = the first row\
+                                    gene_id baseMean log2FoldChange     lfcSE     stat        pvalue          padj\
+1 fgenesh1_kg.12__183__Locus432v1rpkm387.16 588.7405       3.861403 0.1208459 31.95313 4.888133e-224 3.286292e-220\
+> # why the plot keep changing?\
+> # the x-axis keep changing due to the different number of samples in each group (plotCounts), but the y-axis is the same\
+> # The plotCounts() function plots the normalized counts for each sample for a given gene.\
+> # 6.5.3 All genes: MA plot\
+> # MA plot shows the mean of the normalized counts (x-axis) versus the LFC (y-axis) for all genes.\
+> # genes that are significantly differentially expressed are colored to be easily identified\
+> # The default significance threshold is 0.1, but today let\'92s use p < 0.05\
+> # positive LFC values mean the genes are more expressed in poor nutrients \
+> # MA plot needs the dds object\
+> plotMA(dds, ylim=c(-2,2), main="DESeq2", alpha = 0.05)\
+> # save the MA plot using the pdf() device\
+> pdf("05_DiffExpr/fig3.MA.pdf")\
+> plotMA(dds, ylim=c(-2,2), main="DESeq2", alpha = 0.05)\
+> dev.off()\
+RStudioGD \
+        2 \
+> # change shrinkage.\
+> # 6.5.4 Subset of genes: heatmap\
+> # Make a heatmap of the 50 most differentially expressed (lowest p-value) genes:\
+> #   \'95 subset the resuls table to only include significantly differentially expressed genes using an absolute log2\
+> # fold change cutoff of 1 (abs(log2FoldChange) > 1) and an adjusted p-value cutoff of 0.01.\
+> # \'95 create a list of the 50 most differentially expressed gene IDs from your results table\
+> # \'95 subset the VST transformed expression matrix to include only the rows for these 50 genes.\
+> # \'95 make a heatmap of this subset using \'91pheatmap.\
+> # \'95 save your result using the pdf() device\
+> # Identify the top 50 differentially expressed genes from the sorted results table.\
+> top50 <-res_table$gene_id[res_table$padj < 0.05 & abs(res_table$log2FoldChange) > 1][1:50]\
+> # change shrinkage.\
+> # 6.5.4 Subset of genes: heatmap\
+> # Make a heatmap of the 50 most differentially expressed (lowest p-value) genes:\
+> #   \'95 subset the resuls table to only include significantly differentially expressed genes using an absolute log2\
+> # fold change cutoff of 1 (abs(log2FoldChange) > 1) and an adjusted p-value cutoff of 0.01.\
+> # \'95 create a list of the 50 most differentially expressed gene IDs from your results table\
+> # \'95 subset the VST transformed expression matrix to include only the rows for these 50 genes.\
+> # \'95 make a heatmap of this subset using \'91pheatmap.\
+> # \'95 save your result using the pdf() device\
+> # Identify the top 50 differentially expressed genes from the sorted results table.\
+> top50 <-res_table$gene_id[res_table$padj < 0.05 & abs(res_table$log2FoldChange) > 1][1:50]\
+> # Extract the expression levels of the most expressed genes from the vst-transformed dds object\
+> counts_top50 <- counts(dds, normalized=TRUE)[top50,]\
+> hmcol <- colorRampPalette(brewer.pal(9, "YlOrRd"))(100)\
+> heatmap.2(counts_top50,\
++           col = hmcol ,\
++           Rowv = FALSE ,\
++           Colv = FALSE,\
++           scale = "none",\
++           dendrogram = "none",\
++           trace = "none")\
+> # Save with pdf()\
+> pdf("05_DiffExpr/fig4.heatmap_sig_diff_exp.pdf")\
+> heatmap.2(counts_top50,\
++           col = hmcol ,\
++           Rowv = FALSE ,\
++           Colv = FALSE,\
++           scale = "none",\
++           dendrogram = "none",\
++           trace = "none",\
++           margin = c(10,6))\
+> dev.off()\
+RStudioGD \
+        2 \
+> # 7 Additional Exercises\
+> # 19. How many genes show a significant difference in expression on the FDR level of 0.01? Compare with\
+> # the above result\
+> # Answer: 272\
+> resSig <- subset(res_table , padj < 0.01 & abs(log2FoldChange) > 1) # abs(log2FoldChange) > 1 means the absolute value of log2FoldChange is greater than 1\
+> write.table(resSig, file = "05_DiffExpr/diffExpr.sig05.tab", sep = "\\t", quote = FALSE,\
++             row.names = FALSE)\
+> # 7 Additional Exercises\
+> # 19. How many genes show a significant difference in expression on the FDR level of 0.01? Compare with\
+> # the above result\
+> # Answer: 272\
+> resSig <- subset(res_table , padj < 0.01 & abs(log2FoldChange) > 1) # abs(log2FoldChange) > 1 means the absolute value of log2FoldChange is greater than 1\
+> # How many genes show a significant difference \
+> print(resSig))\
+Error: unexpected ')' in "print(resSig))"\
+> # How many genes show a significant difference \
+> print(resSig)\
+                                        gene_id   baseMean log2FoldChange      lfcSE       stat        pvalue          padj\
+1     fgenesh1_kg.12__183__Locus432v1rpkm387.16 588.740471       3.861403 0.12084585  31.953129 4.888133e-224 3.286292e-220\
+2                     estExt_Genemark1.C_130215 386.050518       5.257016 0.19509222  26.946314 6.300903e-160 2.118048e-156\
+3      fgenesh1_kg.7__381__Locus862v1rpkm207.81 222.891461       6.197912 0.33188359  18.674957  7.915334e-78  1.773826e-74\
+4     fgenesh1_kg.23__105__Locus2331v1rpkm69.56 143.510481      -3.023211 0.18325312 -16.497462  3.826379e-61  6.431186e-58\
+5     fgenesh1_kg.21__184__Locus30v1rpkm2293.91 609.876635      -1.454148 0.08900149 -16.338467  5.255815e-60  7.066969e-57\
+6                                e_gw1.29.217.1 147.326042       2.238101 0.16054829  13.940360  3.601185e-44  4.035128e-41\
+7      fgenesh1_kg.4__706__Locus684v1rpkm262.26 202.233358      -1.648453 0.13384961 -12.315709  7.455720e-35  7.160687e-32\
+8     fgenesh1_kg.2__1021__Locus560v1rpkm310.43  86.452850      -2.507247 0.21038295 -11.917539  9.589904e-33  8.059115e-30\
+9                                    gm1.3215_g  54.368815       3.362800 0.30186620  11.140034  8.008911e-29  5.982657e-26\
+10    fgenesh1_kg.2__456__Locus1097v1rpkm159.38 109.627694       1.902377 0.17707901  10.743099  6.386405e-27  4.293580e-24\
+11                 estExt_Genewise1.C_11_t20410  55.082155      -2.960949 0.27698952 -10.689750  1.136772e-26  6.947742e-24\
+12                           fgenesh1_pm.4__324 191.900876      -1.391595 0.13120987 -10.605875  2.798336e-26  1.567768e-23\
+13                                e_gw1.3.448.1  88.564361       1.980178 0.19747023  10.027730  1.151331e-23  5.954151e-21\
+14             estExt_Genewise1Plus.C_11_t20132  51.486718      -2.534963 0.26906948  -9.421220  4.458787e-21  2.141173e-18\
+15                               CE426122_60072  57.449551       2.240445 0.24031925   9.322786  1.133245e-20  4.761754e-18\
+16                           fgenesh1_pm.8__321 135.957397      -1.441012 0.15449388  -9.327311  1.085909e-20  4.761754e-18\
+17                estExt_Genewise1Plus.C_200359  49.280546      -2.440127 0.26235398  -9.300894  1.392697e-20  5.507705e-18\
+18                                CE464077_1844 201.521173      10.200530 1.10299178   9.248056  2.286118e-20  8.538651e-18\
+21     fgenesh1_kg.5__588__Locus1752v1rpkm96.70  90.184620       1.667234 0.18465772   9.028782  1.735930e-19  5.557455e-17\
+22                           fgenesh1_pm.8__343  62.713839      -2.061900 0.23644524  -8.720414  2.771874e-18  8.470595e-16\
+23                                 CE77058_3989  33.574188      -3.004001 0.34980669  -8.587604  8.880167e-18  2.595711e-15\
+24                              CE295976_127029 170.202096      -1.169390 0.13884695  -8.422150  3.696359e-17  1.035443e-14\
+25     fgenesh1_kg.2__557__Locus50v1rpkm1778.79  84.079654       1.576215 0.19580153   8.050063  8.275121e-16  2.225345e-13\
+26                                CE328114_3823  29.657499       5.064608 0.63222354   8.010787  1.139767e-15  2.947175e-13\
+27                           fgenesh1_pg.4__105  84.163701      -1.523973 0.19080589  -7.987032  1.382260e-15  3.441826e-13\
+29     fgenesh1_kg.7__409__Locus2683v1rpkm58.15  47.269404       1.977840 0.25125097   7.871970  3.491000e-15  8.093102e-13\
+30                                e_gw1.51.88.1 165.979865      -1.153033 0.14699861  -7.843839  4.369764e-15  9.792641e-13\
+31              estExt_Genewise1Plus.C_7_t10189 139.163651       1.131771 0.14577222   7.763967  8.231300e-15  1.785130e-12\
+32      fgenesh1_kg.10__4__Locus4196v1rpkm30.86  25.358955       3.234383 0.42182766   7.667545  1.753193e-14  3.683349e-12\
+33                           fgenesh1_pm.3__150  24.197573      -3.204332 0.43002096  -7.451571  9.223500e-14  1.879079e-11\
+34                            MIX23919_29999_58 124.198549      -1.158403 0.15677477  -7.388961  1.479809e-13  2.926105e-11\
+36                                   gm1.3386_g 137.371685      -1.116178 0.15238562  -7.324695  2.394424e-13  4.471586e-11\
+37     fgenesh1_kg.19__90__Locus391v1rpkm421.85 181.567523       1.015785 0.13912301   7.301347  2.849019e-13  5.176744e-11\
+38                           fgenesh1_pm.1__688  28.505711       2.525545 0.34782616   7.260940  3.844101e-13  6.801023e-11\
+39                               e_gw1.11.105.1 139.754652      -1.072102 0.14834102  -7.227277  4.927735e-13  8.282290e-11\
+40     fgenesh1_kg.6__165__Locus2857v1rpkm53.49  22.354603       3.382536 0.46799394   7.227735  4.911162e-13  8.282290e-11\
+41              estExt_Genewise1Plus.C_7_t10373  92.341774      -1.273360 0.18114565  -7.029481  2.073027e-12  3.399258e-10\
+42    fgenesh1_kg.26__139__Locus812v1rpkm223.01  41.943454       1.904974 0.27234481   6.994714  2.658015e-12  4.254723e-10\
+43    fgenesh1_kg.12__269__Locus2377v1rpkm67.83  80.478460      -1.299642 0.18589831  -6.991144  2.726537e-12  4.262908e-10\
+44                                e_gw1.67.13.1  32.102668      -2.246104 0.32271534  -6.960017  3.402318e-12  4.972561e-10\
+45      fgenesh1_kg.44__43__Locus9709v1rpkm4.79  23.045221      -5.344467 0.76726081  -6.965646  3.269008e-12  4.972561e-10\
+46     fgenesh1_kg.4__520__Locus6927v1rpkm12.28  20.151917       4.548262 0.65325808   6.962427  3.344606e-12  4.972561e-10\
+47      fgenesh1_kg.3__712__Locus4249v2rpkm4.60  92.155350      -1.231904 0.17867021  -6.894851  5.392138e-12  7.713052e-10\
+48                    estExt_Genemark1.C_310025  50.846614      -1.598822 0.23221974  -6.884955  5.780593e-12  8.096443e-10\
+49                                   gm1.7937_g  40.928611       1.811870 0.26508748   6.834988  8.201165e-12  1.125233e-09\
+50                                e_gw1.2.159.1  24.415693      -2.660042 0.39125786  -6.798693  1.055722e-11  1.419524e-09\
+51                          fgenesh1_pm.13__269  23.552862      -2.704371 0.39909645  -6.776233  1.233493e-11  1.626035e-09\
+52     fgenesh1_kg.3__361__Locus223v1rpkm649.84  86.738853      -1.213270 0.17995882  -6.741929  1.562976e-11  2.020747e-09\
+53                    estExt_Genewise1.C_330077  43.385578      -1.736480 0.25793499  -6.732238  1.670736e-11  2.119313e-09\
+54                estExt_Genewise1Plus.C_300030  21.181147       2.904036 0.43351114   6.698874  2.100319e-11  2.614897e-09\
+55                                  gw1.3.389.1  21.276579      -2.951711 0.44219314  -6.675163  2.469580e-11  3.018725e-09\
+56                          fgenesh1_pm.14__200  24.165645      -2.487271 0.37499069  -6.632887  3.291843e-11  3.951976e-09\
+57     fgenesh1_kg.9__154__Locus1960v1rpkm84.73  25.593748      -2.464169 0.37788342  -6.520977  6.985091e-11  8.238731e-09\
+58              estExt_Genewise1Plus.C_5_t30220  27.348917       2.200694 0.33779180   6.514941  7.271805e-11  8.385875e-09\
+59                                  gm1.12252_g  24.487181      -2.451132 0.37633612  -6.513146  7.359314e-11  8.385875e-09\
+60                 estExt_Genewise1.C_14_t10212  96.470184      -1.110303 0.17090415  -6.496640  8.213384e-11  9.203097e-09\
+61                                e_gw1.6.294.1  25.745915       6.437902 1.00530652   6.403920  1.514378e-10  1.669043e-08\
+62                               e_gw1.12.698.1  17.545634       3.415316 0.53822459   6.345522  2.216731e-10  2.403723e-08\
+63                                  gm1.10444_g  22.820993      -6.362030 1.00347893  -6.339974  2.298040e-10  2.452337e-08\
+64    fgenesh1_kg.16__134__Locus3058v1rpkm48.86  33.604636       1.883478 0.29806252   6.319071  2.631402e-10  2.764206e-08\
+65                                   gm1.6046_g  46.864711       1.629349 0.25918906   6.286336  3.250466e-10  3.361982e-08\
+66      fgenesh1_kg.8__496__Locus9445v1rpkm5.19  19.378231      -2.937726 0.46951833  -6.256893  3.927235e-10  4.000425e-08\
+67     fgenesh1_kg.6__217__Locus24495v1rpkm0.61  60.139536       1.332769 0.21341019   6.245104  4.235175e-10  4.249714e-08\
+68    fgenesh1_kg.12__304__Locus1860v1rpkm89.38  36.716458      -1.742809 0.27989405  -6.226675  4.764389e-10  4.710440e-08\
+69                                CE305710_3437  76.149781      -1.169516 0.18801613  -6.220294  4.962245e-10  4.834952e-08\
+70                    estExt_Genewise1.C_670016  36.785057      -1.763938 0.28440006  -6.202311  5.564002e-10  5.343827e-08\
+71       fgenesh1_kg.4__3__Locus1778v1rpkm94.74  43.676089      -1.555803 0.25103619  -6.197525  5.735807e-10  5.431244e-08\
+72    fgenesh1_kg.24__113__Locus5877v1rpkm17.57  18.671259      -2.759457 0.44985603  -6.134089  8.564878e-10  7.997455e-08\
+74     fgenesh1_kg.46__86__Locus4286v1rpkm29.93  25.567853      -2.063961 0.34214380  -6.032437  1.615053e-09  1.467298e-07\
+76                               e_gw1.5.1757.1  18.467090       2.694798 0.44904926   6.001118  1.959634e-09  1.733503e-07\
+77     fgenesh1_kg.13__224__Locus9798v1rpkm4.67  21.722368      -2.259404 0.38489717  -5.870150  4.353998e-09  3.801549e-07\
+78     fgenesh1_kg.74__28__Locus758v1rpkm236.43  47.604539      -1.392543 0.23779290  -5.856116  4.738178e-09  4.083945e-07\
+80                                e_gw1.51.23.1  36.764850      -1.594668 0.27790013  -5.738278  9.564394e-09  7.977985e-07\
+81     fgenesh1_kg.9__558__Locus13194v5rpkm0.28  14.119603       3.448446 0.60104302   5.737436  9.612031e-09  7.977985e-07\
+82     fgenesh1_kg.3__452__Locus900v1rpkm197.98  83.585313      -1.073748 0.18757087  -5.724490  1.037447e-08  8.505798e-07\
+83                             MIX24039_2229_61  14.733264      -3.036383 0.53128024  -5.715219  1.095631e-08  8.874612e-07\
+84                                   gm1.9084_g  54.017778      -1.280316 0.22432149  -5.707506  1.146438e-08  9.175596e-07\
+85     fgenesh1_kg.8__503__Locus700v1rpkm255.24  38.728468      -1.513507 0.26557488  -5.698983  1.205240e-08  9.532742e-07\
+86                                e_gw1.3.786.1  41.269343       1.457254 0.25645216   5.682362  1.328471e-08  1.038525e-06\
+87     fgenesh1_kg.30__23__Locus16886v3rpkm0.66  13.193044       3.529952 0.63697372   5.541755  2.994558e-08  2.314070e-06\
+89    fgenesh1_kg.23__125__Locus2619v1rpkm59.90  27.043106      -1.788248 0.32331986  -5.530894  3.186024e-08  2.406701e-06\
+90                 estExt_Genewise1.C_10_t10057  59.499448      -1.171294 0.21189592  -5.527685  3.244837e-08  2.423894e-06\
+91    fgenesh1_kg.23__143__Locus2327v1rpkm69.61  32.843981      -1.667205 0.30196250  -5.521230  3.366340e-08  2.487022e-06\
+92                                  gm1.12003_g  66.231497      -1.083452 0.19692809  -5.501764  3.760093e-08  2.747729e-06\
+93                    estExt_Genemark1.C_430071  46.107874      -1.335753 0.24311832  -5.494252  3.923700e-08  2.836456e-06\
+94              estExt_Genewise1Plus.C_2_t30286  27.042282      -1.776744 0.32620234  -5.446754  5.129721e-08  3.668842e-06\
+95      fgenesh1_kg.3__69__Locus2224v1rpkm73.81  40.653035       1.462616 0.26867260   5.443861  5.213789e-08  3.689716e-06\
+96                                 CE442950_874  19.275000      -2.212645 0.40674373  -5.439900  5.331054e-08  3.733404e-06\
+97                estExt_fgenesh1_pm.C_2_t10131  79.850671       1.000598 0.18565817   5.389462  7.066888e-08  4.898009e-06\
+98                estExt_Genewise1Plus.C_430030  12.550079      -6.167790 1.14535152  -5.385063  7.241928e-08  4.968111e-06\
+99    fgenesh1_kg.9__299__Locus1033v1rpkm171.63  61.133934      -1.091109 0.20393205  -5.350354  8.778213e-08  5.961205e-06\
+102                              e_gw1.10.439.1  12.651152       3.264191 0.61259953   5.328425  9.906787e-08  6.529738e-06\
+103   fgenesh1_kg.14__135__Locus4345v1rpkm29.26  47.208317       1.244955 0.23449752   5.309032  1.102088e-07  7.193534e-06\
+104                                  gm1.7022_g   8.759470       6.594240 1.24653739   5.290046  1.222855e-07  7.905050e-06\
+105                                  gm1.2762_g  13.203468       3.069103 0.58183755   5.274845  1.328681e-07  8.507353e-06\
+106                              e_gw1.16.404.1  28.467822       1.657752 0.31453167   5.270541  1.360220e-07  8.627128e-06\
+107                          fgenesh1_pm.1__202  28.613435      -1.628226 0.30948397  -5.261101  1.431957e-07  8.997241e-06\
+108    fgenesh1_kg.2__749__Locus10578v1rpkm3.80  23.120496      -1.931133 0.36839691  -5.241990  1.588538e-07  9.888649e-06\
+109                               CE370630_6936  37.074168      -1.413350 0.27086838  -5.217849  1.810125e-07  1.116465e-05\
+111    fgenesh1_kg.8__247__Locus26450v1rpkm0.53  13.151353      -2.775143 0.53928612  -5.145956  2.661619e-07  1.612078e-05\
+112                                  gm1.1641_g  31.859497       1.576515 0.30686375   5.137507  2.784076e-07  1.671192e-05\
+114                                  gm1.5220_g  15.941063       2.384131 0.46535644   5.123236  3.003368e-07  1.771197e-05\
+116                          fgenesh1_pm.18__60  17.624572      -2.258211 0.44316746  -5.095615  3.476118e-07  2.014650e-05\
+117    fgenesh1_kg.4__712__Locus914v1rpkm194.53  38.552727      -1.321418 0.26064516  -5.069795  3.982443e-07  2.288373e-05\
+119                              e_gw1.1.1698.1  28.358369      -1.557527 0.30993624  -5.025314  5.026091e-07  2.815868e-05\
+120                          fgenesh1_pm.19__46  44.956541       1.204944 0.23969828   5.026918  4.984250e-07  2.815868e-05\
+121     fgenesh1_kg.35__97__Locus7479v2rpkm5.03  10.636910       3.726777 0.74447105   5.005939  5.559039e-07  3.088712e-05\
+122                               e_gw1.6.208.1  10.643894      -3.317582 0.66395217  -4.996719  5.831398e-07  3.213483e-05\
+123   fgenesh1_kg.30__117__Locus434v1rpkm385.99  30.963664      -1.530023 0.30716257  -4.981151  6.320711e-07  3.454808e-05\
+124                                CE1354_14251  28.750105      -1.515209 0.30462839  -4.973957  6.559971e-07  3.528215e-05\
+125   fgenesh1_kg.19__223__Locus1952v1rpkm85.24  17.554483       2.094462 0.42101046   4.974845  6.529971e-07  3.528215e-05\
+126    fgenesh1_kg.2__384__Locus4711v1rpkm25.96  54.310460      -1.075545 0.21641973  -4.969716  6.705090e-07  3.577644e-05\
+127                   estExt_Genewise1.C_310035  59.173397       1.036451 0.20912297   4.956180  7.189266e-07  3.805782e-05\
+128                                  gm1.5886_g  23.034506      -1.719303 0.34767940  -4.945080  7.611243e-07  3.997687e-05\
+129    fgenesh1_kg.5__173__Locus462v1rpkm367.72  15.298546       2.219125 0.45650302   4.861141  1.167113e-06  6.082558e-05\
+130    fgenesh1_kg.7__347__Locus755v1rpkm238.02  17.875713       1.951565 0.40391281   4.831649  1.354067e-06  7.002608e-05\
+131                              e_gw1.1.1381.1   9.450437       4.518533 0.94185678   4.797474  1.606790e-06  8.246146e-05\
+132                          fgenesh1_pm.57__14  38.860995      -1.215807 0.25433420  -4.780353  1.749876e-06  8.912436e-05\
+133   fgenesh1_kg.3__588__Locus1437v1rpkm122.42  26.550411       1.513195 0.31699553   4.773554  1.810028e-06  9.149485e-05\
+134                          fgenesh1_pm.1__279  14.227813       2.372464 0.49829909   4.761125  1.925167e-06  9.658879e-05\
+136   fgenesh1_kg.13__282__Locus683v1rpkm262.27  32.116105      -1.337224 0.28362944  -4.714686  2.420834e-06  1.196711e-04\
+137    fgenesh1_kg.12__45__Locus2037v1rpkm81.59  16.291083      -2.177105 0.46303203  -4.701845  2.578216e-06  1.265208e-04\
+142    fgenesh1_kg.4__439__Locus98v1rpkm1179.20  27.937245       1.424235 0.30794765   4.624926  3.747322e-06  1.774172e-04\
+143                                CE403705_297   5.529430      -5.947489 1.28772339  -4.618608  3.863234e-06  1.816260e-04\
+144               estExt_Genewise1Plus.C_180191   9.145977      -3.611458 0.78530968  -4.598769  4.249940e-06  1.984191e-04\
+146  fgenesh1_kg.15__214__Locus1595v1rpkm109.13  18.354538       1.810651 0.39509434   4.582831  4.587218e-06  2.112320e-04\
+147    fgenesh1_kg.4__149__Locus17241v3rpkm0.54  15.101987      -2.061390 0.45163233  -4.564309  5.011422e-06  2.291958e-04\
+148  fgenesh1_kg.4__331__Locus440v4rpkm2.27_PRE  38.405475       1.184497 0.26017870   4.552628  5.297989e-06  2.406647e-04\
+150                               CE336349_6508  19.686546       1.713931 0.37809663   4.533051  5.813776e-06  2.605734e-04\
+151                   estExt_Genewise1.C_170005  26.723603       1.442047 0.31879100   4.523486  6.082928e-06  2.708313e-04\
+152 fgenesh1_kg.3__762__Locus1891v2rpkm6.83_PRE  21.680185      -1.672191 0.37007065  -4.518572  6.225819e-06  2.753696e-04\
+153                          fgenesh1_pm.42__31   8.362731      -4.771898 1.06326803  -4.487954  7.191036e-06  3.159826e-04\
+155                                  gm1.1324_g  38.740465       1.151006 0.25748665   4.470156  7.816240e-06  3.390231e-04\
+156                                  gm1.7360_g  49.972685      -1.023919 0.22993818  -4.453021  8.467059e-06  3.648977e-04\
+157    fgenesh1_kg.2__464__Locus2647v1rpkm59.21  23.492192      -1.480045 0.33527269  -4.414451  1.012665e-05  4.336398e-04\
+158                    estExt_Genemark1.C_90026  16.353703      -1.829374 0.41474415  -4.410849  1.029659e-05  4.378646e-04\
+159  fgenesh1_kg.11__434__Locus1341v1rpkm131.70  10.934297       2.572168 0.58330930   4.409613  1.035557e-05  4.378646e-04\
+160     fgenesh1_kg.62__6__Locus6225v1rpkm15.54   7.731039      -3.765741 0.85842107  -4.386823  1.150183e-05  4.823061e-04\
+161                          fgenesh1_pm.12__80   6.871054      -5.274537 1.20260901  -4.385912  1.155009e-05  4.823061e-04\
+163                              e_gw1.11.751.1   4.726668       5.690621 1.30373266   4.364868  1.271994e-05  5.246390e-04\
+164                 estExt_Genemark1.C_7_t10078   4.656166      -5.714080 1.31184664  -4.355753  1.326104e-05  5.436218e-04\
+165                          fgenesh1_pm.2__436  12.827035       2.160111 0.49618742   4.353417  1.340320e-05  5.461197e-04\
+ [ reached 'max' / getOption("max.print") -- omitted 65 rows ]\
+> View(resSig)\
+> View(resSig)\
+> setwd("~/BashExercise/06_Quiz")\
+> library(DESeq2)\
+> library(magrittr)\
+> # load the packages\
+> library(DESeq2)\
+> library(gplots)\
+> library(pheatmap)\
+> library(RColorBrewer)\
+> library(magrittr)\
+> \
+> rm(list = ls())\
+> # load the packages\
+> library(DESeq2)\
+> library(gplots)\
+> library(pheatmap)\
+> library(RColorBrewer)\
+> library(magrittr)\
+> # read the count matrix\
+> countMatrix <- read.csv("06_Quiz/transcriptomicsQuizData.txt",\
++                         sep = "\\t", row.names = "gene_id") %>%\
++   as.matrix()\
+Error in h(simpleError(msg, call)) : \
+  error in evaluating the argument 'x' in selecting a method for function 'as.matrix': cannot open the connection\
+In addition: Warning message:\
+In file(file, "rt") :\
+  cannot open file '06_Quiz/transcriptomicsQuizData.txt': No such file or directory\
+> # check the column names of the count matrix\
+> colnames(countMatrix)\
+Error in h(simpleError(msg, call)) : \
+  error in evaluating the argument 'x' in selecting a method for function 'colnames': object 'countMatrix' not found\
+> # read the count matrix\
+> countMatrix <- read.csv("06_Quiz/transcriptomicsQuizData.txt",\
++                         sep = "\\t", row.names = "gene_id") %>% \
++   as.matrix()\
+Error in h(simpleError(msg, call)) : \
+  error in evaluating the argument 'x' in selecting a method for function 'as.matrix': cannot open the connection\
+In addition: Warning message:\
+In file(file, "rt") :\
+  cannot open file '06_Quiz/transcriptomicsQuizData.txt': No such file or directory\
+> setwd("~/BashExercise/06_Quiz")\
+> getwd()\
+[1] "/Users/med-snt/BashExercise/06_Quiz"\
+> # read the count matrix\
+> countMatrix <- read.csv("06_Quiz/transcriptomicsQuizData.txt",\
++                         sep = "\\t", row.names = "gene_id") %>% \
++   as.matrix()\
+Error in h(simpleError(msg, call)) : \
+  error in evaluating the argument 'x' in selecting a method for function 'as.matrix': cannot open the connection\
+In addition: Warning message:\
+In file(file, "rt") :\
+  cannot open file '06_Quiz/transcriptomicsQuizData.txt': No such file or directory\
+> # read the count matrix\
+> countMatrix <- read.csv("06_Quiz",\
++                         sep = "\\t", row.names = "gene_id") %>% \
++   as.matrix()\
+Error in h(simpleError(msg, call)) : \
+  error in evaluating the argument 'x' in selecting a method for function 'as.matrix': cannot open the connection\
+In addition: Warning message:\
+In file(file, "rt") : cannot open file '06_Quiz': No such file or directory\
+> # check the column names of the count matrix\
+> colnames(countMatrix)\
+Error in h(simpleError(msg, call)) : \
+  error in evaluating the argument 'x' in selecting a method for function 'colnames': object 'countMatrix' not found\
+> setwd("~/BashExercise/06_Quiz")\
+> # read the count matrix\
+> countMatrix <- read.csv("06_Quiz",\
++                         sep = "\\t", row.names = "gene_id") %>% \
++   as.matrix()\
+Error in h(simpleError(msg, call)) : \
+  error in evaluating the argument 'x' in selecting a method for function 'as.matrix': cannot open the connection\
+In addition: Warning message:\
+In file(file, "rt") : cannot open file '06_Quiz': No such file or directory\
+> # read the count matrix\
+> countMatrix <- read.csv("transcriptomicsQuizData.txt",\
++                         sep = "\\t", row.names = "gene_id") %>% \
++   as.matrix()\
+> # check the column names of the count matrix\
+> colnames(countMatrix)\
+ [1] "Pca_Ribes_rep1"  "Pca_Ribes_rep2"  "Pca_Ribes_rep3"  "Pca_Ribes_rep4"  "Pca_Ribes_rep5"  "Pca_Ribes_rep6"  "Pca_Ribes_rep7" \
+ [8] "Pca_Ribes_rep8"  "Pca_Ribes_rep9"  "Pca_Salix_rep1"  "Pca_Salix_rep2"  "Pca_Salix_rep3"  "Pca_Salix_rep4"  "Pca_Salix_rep5" \
+[15] "Pca_Salix_rep6"  "Pca_Salix_rep7"  "Pca_Salix_rep8"  "Pca_Salix_rep9"  "Pca_Urtica_rep1" "Pca_Urtica_rep2" "Pca_Urtica_rep3"\
+[22] "Pca_Urtica_rep4" "Pca_Urtica_rep5" "Pca_Urtica_rep6" "Pca_Urtica_rep7" "Pca_Urtica_rep8" "Pca_Urtica_rep9"\
+> rm(list = ls())\
+> # load the packages\
+> library(DESeq2)\
+> library(gplots)\
+> library(pheatmap)\
+> library(RColorBrewer)\
+> library(magrittr)\
+> getwd()\
+[1] "/Users/med-snt/BashExercise/06_Quiz"\
+> # read the count matrix\
+> countMatrix <- read.csv("transcriptomicsQuizData.txt",\
++                         sep = "\\t", row.names = "gene_id") %>% \
++   as.matrix()\
+> # check the column names of the count matrix\
+> colnames(countMatrix)\
+ [1] "Pca_Ribes_rep1"  "Pca_Ribes_rep2"  "Pca_Ribes_rep3"  "Pca_Ribes_rep4"  "Pca_Ribes_rep5"  "Pca_Ribes_rep6"  "Pca_Ribes_rep7" \
+ [8] "Pca_Ribes_rep8"  "Pca_Ribes_rep9"  "Pca_Salix_rep1"  "Pca_Salix_rep2"  "Pca_Salix_rep3"  "Pca_Salix_rep4"  "Pca_Salix_rep5" \
+[15] "Pca_Salix_rep6"  "Pca_Salix_rep7"  "Pca_Salix_rep8"  "Pca_Salix_rep9"  "Pca_Urtica_rep1" "Pca_Urtica_rep2" "Pca_Urtica_rep3"\
+[22] "Pca_Urtica_rep4" "Pca_Urtica_rep5" "Pca_Urtica_rep6" "Pca_Urtica_rep7" "Pca_Urtica_rep8" "Pca_Urtica_rep9"\
+> View(countMatrix)\
+> # define the sample names\
+> sampleNames <- c("Pca_Ribes_rep1", "Pca_Ribes_rep2", "Pca_Ribes_rep3",\
++                  "Pca_Ribes_rep4", "Pca_Ribes_rep5", "Pca_Ribes_rep6",\
++                  "Pca_Ribes_rep7", "Pca_Ribes_rep8", "Pca_Ribes_rep9",\
++                  "Pca_Salix_rep1", "Pca_Salix_rep2", "Pca_Salix_rep3",\
++                  "Pca_Salix_rep4", "Pca_Salix_rep5", "Pca_Salix_rep6",\
++                  "Pca_Salix_rep7", "Pca_Salix_rep8", "Pca_Salix_rep9",\
++                  "Pca_Urtica_rep1", "Pca_Urtica_rep2", "Pca_Urtica_rep3",\
++                  "Pca_Urtica_rep4", "Pca_Urtica_rep5", "Pca_Urtica_rep6",\
++                  "Pca_Urtica_rep7", "Pca_Urtica_rep8", "Pca_Urtica_rep9")\
+> sampleNames # Check\
+ [1] "Pca_Ribes_rep1"  "Pca_Ribes_rep2"  "Pca_Ribes_rep3"  "Pca_Ribes_rep4"  "Pca_Ribes_rep5"  "Pca_Ribes_rep6"  "Pca_Ribes_rep7" \
+ [8] "Pca_Ribes_rep8"  "Pca_Ribes_rep9"  "Pca_Salix_rep1"  "Pca_Salix_rep2"  "Pca_Salix_rep3"  "Pca_Salix_rep4"  "Pca_Salix_rep5" \
+[15] "Pca_Salix_rep6"  "Pca_Salix_rep7"  "Pca_Salix_rep8"  "Pca_Salix_rep9"  "Pca_Urtica_rep1" "Pca_Urtica_rep2" "Pca_Urtica_rep3"\
+[22] "Pca_Urtica_rep4" "Pca_Urtica_rep5" "Pca_Urtica_rep6" "Pca_Urtica_rep7" "Pca_Urtica_rep8" "Pca_Urtica_rep9"\
+> # Define the sample conditions\
+> sampleConditions <- c("Ribes", "Ribes", "Ribes",\
++                       "Ribes", "Ribes", "Ribes",\
++                       "Ribes", "Ribes", "Ribes",\
++                       "Salix", "Salix", "Salix",\
++                       "Salix", "Salix", "Salix",\
++                       "Salix", "Salix", "Salix",\
++                       "Urtica", "Urtica", "Urtica",\
++                       "Urtica", "Urtica", "Urtica",\
++                       "Urtica", "Urtica", "Urtica")\
+> sampleConditions # check\
+ [1] "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Salix"  "Salix"  "Salix"  "Salix"  "Salix" \
+[15] "Salix"  "Salix"  "Salix"  "Salix"  "Urtica" "Urtica" "Urtica" "Urtica" "Urtica" "Urtica" "Urtica" "Urtica" "Urtica"\
+> # Create a sample table from the sample conditions\
+> sampleTable <- data.frame(condition = as.factor(sampleConditions))\
+> View(sampleTable)\
+> row.names(sampleTable) <- sampleNames # Set the first column as row names\
+> sampleTable # Check\
+                condition\
+Pca_Ribes_rep1      Ribes\
+Pca_Ribes_rep2      Ribes\
+Pca_Ribes_rep3      Ribes\
+Pca_Ribes_rep4      Ribes\
+Pca_Ribes_rep5      Ribes\
+Pca_Ribes_rep6      Ribes\
+Pca_Ribes_rep7      Ribes\
+Pca_Ribes_rep8      Ribes\
+Pca_Ribes_rep9      Ribes\
+Pca_Salix_rep1      Salix\
+Pca_Salix_rep2      Salix\
+Pca_Salix_rep3      Salix\
+Pca_Salix_rep4      Salix\
+Pca_Salix_rep5      Salix\
+Pca_Salix_rep6      Salix\
+Pca_Salix_rep7      Salix\
+Pca_Salix_rep8      Salix\
+Pca_Salix_rep9      Salix\
+Pca_Urtica_rep1    Urtica\
+Pca_Urtica_rep2    Urtica\
+Pca_Urtica_rep3    Urtica\
+Pca_Urtica_rep4    Urtica\
+Pca_Urtica_rep5    Urtica\
+Pca_Urtica_rep6    Urtica\
+Pca_Urtica_rep7    Urtica\
+Pca_Urtica_rep8    Urtica\
+Pca_Urtica_rep9    Urtica\
+> # compare matrix column names with sample names\
+> colnames(countMatrix) %in% rownames(sampleTable)\
+ [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE\
+[26] TRUE TRUE\
+> # Create the deseq object using the count matrix and sample table.\
+> # Specify the design veriable as condition\
+> dds <- DESeqDataSetFromMatrix(countData = countMatrix,\
++                               colData = sampleTable,\
++                               design = ~ condition)\
+> dds #Check\
+class: DESeqDataSet \
+dim: 10284 27 \
+metadata(1): version\
+assays(1): counts\
+rownames(10284): Polcal_g10 Polcal_g100 ... Polcal_g9998 Polcal_g9999\
+rowData names(0):\
+colnames(27): Pca_Ribes_rep1 Pca_Ribes_rep2 ... Pca_Urtica_rep8 Pca_Urtica_rep9\
+colData names(1): condition\
+> rm(list = ls())\
+> # load the packages\
+> library(DESeq2)\
+> library(gplots)\
+> library(pheatmap)\
+> library(RColorBrewer)\
+> library(magrittr)\
+> getwd()\
+[1] "/Users/med-snt/BashExercise/06_Quiz"\
+> # read the count matrix\
+> countMatrix <- read.csv("transcriptomicsQuizData.txt",\
++                         sep = "\\t", row.names = "gene_id") %>% \
++   as.matrix()\
+> # check the column names of the count matrix\
+> colnames(countMatrix)\
+ [1] "Pca_Ribes_rep1"  "Pca_Ribes_rep2"  "Pca_Ribes_rep3"  "Pca_Ribes_rep4"  "Pca_Ribes_rep5"  "Pca_Ribes_rep6"  "Pca_Ribes_rep7" \
+ [8] "Pca_Ribes_rep8"  "Pca_Ribes_rep9"  "Pca_Salix_rep1"  "Pca_Salix_rep2"  "Pca_Salix_rep3"  "Pca_Salix_rep4"  "Pca_Salix_rep5" \
+[15] "Pca_Salix_rep6"  "Pca_Salix_rep7"  "Pca_Salix_rep8"  "Pca_Salix_rep9"  "Pca_Urtica_rep1" "Pca_Urtica_rep2" "Pca_Urtica_rep3"\
+[22] "Pca_Urtica_rep4" "Pca_Urtica_rep5" "Pca_Urtica_rep6" "Pca_Urtica_rep7" "Pca_Urtica_rep8" "Pca_Urtica_rep9"\
+> # define the sample names\
+> sampleNames <- c("Pca_Ribes_rep1", "Pca_Ribes_rep2", "Pca_Ribes_rep3",\
++                  "Pca_Ribes_rep4", "Pca_Ribes_rep5", "Pca_Ribes_rep6",\
++                  "Pca_Ribes_rep7", "Pca_Ribes_rep8", "Pca_Ribes_rep9",\
++                  "Pca_Salix_rep1", "Pca_Salix_rep2", "Pca_Salix_rep3",\
++                  "Pca_Salix_rep4", "Pca_Salix_rep5", "Pca_Salix_rep6",\
++                  "Pca_Salix_rep7", "Pca_Salix_rep8", "Pca_Salix_rep9",\
++                  "Pca_Urtica_rep1", "Pca_Urtica_rep2", "Pca_Urtica_rep3",\
++                  "Pca_Urtica_rep4", "Pca_Urtica_rep5", "Pca_Urtica_rep6",\
++                  "Pca_Urtica_rep7", "Pca_Urtica_rep8", "Pca_Urtica_rep9")\
+> sampleNames # Check\
+ [1] "Pca_Ribes_rep1"  "Pca_Ribes_rep2"  "Pca_Ribes_rep3"  "Pca_Ribes_rep4"  "Pca_Ribes_rep5"  "Pca_Ribes_rep6"  "Pca_Ribes_rep7" \
+ [8] "Pca_Ribes_rep8"  "Pca_Ribes_rep9"  "Pca_Salix_rep1"  "Pca_Salix_rep2"  "Pca_Salix_rep3"  "Pca_Salix_rep4"  "Pca_Salix_rep5" \
+[15] "Pca_Salix_rep6"  "Pca_Salix_rep7"  "Pca_Salix_rep8"  "Pca_Salix_rep9"  "Pca_Urtica_rep1" "Pca_Urtica_rep2" "Pca_Urtica_rep3"\
+[22] "Pca_Urtica_rep4" "Pca_Urtica_rep5" "Pca_Urtica_rep6" "Pca_Urtica_rep7" "Pca_Urtica_rep8" "Pca_Urtica_rep9"\
+> # Define the sample conditions\
+> sampleConditions <- c("Ribes", "Ribes", "Ribes",\
++                       "Ribes", "Ribes", "Ribes",\
++                       "Ribes", "Ribes", "Ribes",\
++                       "Salix", "Salix", "Salix",\
++                       "Salix", "Salix", "Salix",\
++                       "Salix", "Salix", "Salix",\
++                       "Urtica", "Urtica", "Urtica",\
++                       "Urtica", "Urtica", "Urtica",\
++                       "Urtica", "Urtica", "Urtica")\
+> sampleConditions # check\
+ [1] "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Ribes"  "Salix"  "Salix"  "Salix"  "Salix"  "Salix" \
+[15] "Salix"  "Salix"  "Salix"  "Salix"  "Urtica" "Urtica" "Urtica" "Urtica" "Urtica" "Urtica" "Urtica" "Urtica" "Urtica"\
+> # Create a sample table from the sample conditions\
+> sampleTable <- data.frame(condition = as.factor(sampleConditions))\
+> row.names(sampleTable) <- sampleNames # Set the first column as row names\
+> sampleTable # Check\
+                condition\
+Pca_Ribes_rep1      Ribes\
+Pca_Ribes_rep2      Ribes\
+Pca_Ribes_rep3      Ribes\
+Pca_Ribes_rep4      Ribes\
+Pca_Ribes_rep5      Ribes\
+Pca_Ribes_rep6      Ribes\
+Pca_Ribes_rep7      Ribes\
+Pca_Ribes_rep8      Ribes\
+Pca_Ribes_rep9      Ribes\
+Pca_Salix_rep1      Salix\
+Pca_Salix_rep2      Salix\
+Pca_Salix_rep3      Salix\
+Pca_Salix_rep4      Salix\
+Pca_Salix_rep5      Salix\
+Pca_Salix_rep6      Salix\
+Pca_Salix_rep7      Salix\
+Pca_Salix_rep8      Salix\
+Pca_Salix_rep9      Salix\
+Pca_Urtica_rep1    Urtica\
+Pca_Urtica_rep2    Urtica\
+Pca_Urtica_rep3    Urtica\
+Pca_Urtica_rep4    Urtica\
+Pca_Urtica_rep5    Urtica\
+Pca_Urtica_rep6    Urtica\
+Pca_Urtica_rep7    Urtica\
+Pca_Urtica_rep8    Urtica\
+Pca_Urtica_rep9    Urtica\
+> # compare matrix column names with sample names\
+> colnames(countMatrix) %in% rownames(sampleTable)\
+ [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE\
+[26] TRUE TRUE\
+> # Create the deseq object using the count matrix and sample table.\
+> # Specify the design veriable as condition\
+> dds <- DESeqDataSetFromMatrix(countData = countMatrix,\
++                               colData = sampleTable,\
++                               design = ~ condition)\
+> dds #Check\
+class: DESeqDataSet \
+dim: 10284 27 \
+metadata(1): version\
+assays(1): counts\
+rownames(10284): Polcal_g10 Polcal_g100 ... Polcal_g9998 Polcal_g9999\
+rowData names(0):\
+colnames(27): Pca_Ribes_rep1 Pca_Ribes_rep2 ... Pca_Urtica_rep8 Pca_Urtica_rep9\
+colData names(1): condition\
+> dds <- estimateSizeFactors(dds) # Estimate the size factors\
+> sizeFactors(dds) # Check the size factors\
+ Pca_Ribes_rep1  Pca_Ribes_rep2  Pca_Ribes_rep3  Pca_Ribes_rep4  Pca_Ribes_rep5  Pca_Ribes_rep6  Pca_Ribes_rep7  Pca_Ribes_rep8 \
+      0.8630273       0.7834657       0.8745464       1.3164979       1.0952945       1.2201038       0.6589952       0.7229116 \
+ Pca_Ribes_rep9  Pca_Salix_rep1  Pca_Salix_rep2  Pca_Salix_rep3  Pca_Salix_rep4  Pca_Salix_rep5  Pca_Salix_rep6  Pca_Salix_rep7 \
+      0.5084469       0.8648081       0.9674530       1.5331038       0.9743454       0.8221361       1.4013334       1.0288940 \
+ Pca_Salix_rep8  Pca_Salix_rep9 Pca_Urtica_rep1 Pca_Urtica_rep2 Pca_Urtica_rep3 Pca_Urtica_rep4 Pca_Urtica_rep5 Pca_Urtica_rep6 \
+      0.6923997       0.6714817       1.4183750       1.6818999       1.4051836       1.6466206       1.3068322       1.1053697 \
+Pca_Urtica_rep7 Pca_Urtica_rep8 Pca_Urtica_rep9 \
+      1.5735130       0.9652796       0.8897406 \
+> dds <- estimateSizeFactors(dds) # Estimate the size factors\
+> sizeFactors(dds) # Check the size factors\
+ Pca_Ribes_rep1  Pca_Ribes_rep2  Pca_Ribes_rep3  Pca_Ribes_rep4  Pca_Ribes_rep5  Pca_Ribes_rep6  Pca_Ribes_rep7  Pca_Ribes_rep8 \
+      0.8630273       0.7834657       0.8745464       1.3164979       1.0952945       1.2201038       0.6589952       0.7229116 \
+ Pca_Ribes_rep9  Pca_Salix_rep1  Pca_Salix_rep2  Pca_Salix_rep3  Pca_Salix_rep4  Pca_Salix_rep5  Pca_Salix_rep6  Pca_Salix_rep7 \
+      0.5084469       0.8648081       0.9674530       1.5331038       0.9743454       0.8221361       1.4013334       1.0288940 \
+ Pca_Salix_rep8  Pca_Salix_rep9 Pca_Urtica_rep1 Pca_Urtica_rep2 Pca_Urtica_rep3 Pca_Urtica_rep4 Pca_Urtica_rep5 Pca_Urtica_rep6 \
+      0.6923997       0.6714817       1.4183750       1.6818999       1.4051836       1.6466206       1.3068322       1.1053697 \
+Pca_Urtica_rep7 Pca_Urtica_rep8 Pca_Urtica_rep9 \
+      1.5735130       0.9652796       0.8897406 \
+> normalized_counts <- as.data.frame(counts(dds, normalized=TRUE))\
+> head(normalized_counts)\
+              Pca_Ribes_rep1 Pca_Ribes_rep2 Pca_Ribes_rep3 Pca_Ribes_rep4 Pca_Ribes_rep5 Pca_Ribes_rep6 Pca_Ribes_rep7\
+Polcal_g10         76.474986      113.59783     109.771187      75.199512      93.125638     101.630698       62.21593\
+Polcal_g100       128.617021      135.29629     116.631886     165.590846     147.905425     125.399168       91.04770\
+Polcal_g1000       83.427257       81.68832      98.336689      74.439921      77.604698      93.434674       78.90801\
+Polcal_g10000      15.063255       11.48742      18.295198      24.306913      22.824911      20.490060       10.62223\
+Polcal_g10006       9.269695       14.04018      16.008298      37.219961      19.172925      29.505687       13.65716\
+Polcal_g10010       6.952271        3.82914       4.573799       8.355501       4.564982       4.917614       10.62223\
+              Pca_Ribes_rep8 Pca_Ribes_rep9 Pca_Salix_rep1 Pca_Salix_rep2 Pca_Salix_rep3 Pca_Salix_rep4 Pca_Salix_rep5\
+Polcal_g10          35.96567      57.036436      94.818722      85.792281      93.927106       95.44870      79.062333\
+Polcal_g100         91.29747     123.906740     123.726868     135.407093     150.022462      123.15961     148.393918\
+Polcal_g1000        88.53088      72.770625      71.692204      82.691355      86.752119      109.81732      71.764272\
+Polcal_g10000       27.66590      17.700963      13.875910      10.336419      12.393160       12.31596      20.677841\
+Polcal_g10006        5.53318      15.734189      13.875910      20.672839      20.872690        5.13165      18.245154\
+Polcal_g10010        2.76659       9.833868       4.625303       6.201852       5.218173        5.13165       3.649031\
+              Pca_Salix_rep6 Pca_Salix_rep7 Pca_Salix_rep8 Pca_Salix_rep9 Pca_Urtica_rep1 Pca_Urtica_rep2 Pca_Urtica_rep3\
+Polcal_g10         99.904849      64.146549      69.324116     137.010439      105.754825      101.670735        86.10974\
+Polcal_g100       143.434818     121.489677     111.207436     102.757829      155.107077      126.047929       160.83307\
+Polcal_g1000       72.787818      67.062302      69.324116      89.354634       95.179343       82.644632        86.82139\
+Polcal_g10000      20.694576      28.185605      21.663786       8.935463       32.431480       13.675011        22.06117\
+Polcal_g10006      19.267364      13.606844       8.665515      16.381683       33.841544       28.539154        29.88933\
+Polcal_g10010       2.854424       6.803422      11.554019       4.467732        7.050322        8.918486         9.25146\
+              Pca_Urtica_rep4 Pca_Urtica_rep5 Pca_Urtica_rep6 Pca_Urtica_rep7 Pca_Urtica_rep8 Pca_Urtica_rep9\
+Polcal_g10         109.314802       96.416360       74.183328      104.225386      104.632894        96.65739\
+Polcal_g100        149.396896      122.433474      105.846944      151.253914      114.992587       104.52485\
+Polcal_g1000        83.808015       95.651151       59.708532       63.552065       83.913509        61.81577\
+Polcal_g10000       15.789916       22.191067       24.426218       20.336661       12.431631        16.85885\
+Polcal_g10006       34.009049       16.834603       11.760772       24.149785       18.647447        23.60239\
+Polcal_g10010        7.894958        9.182511        6.332723        3.813124        4.143877        10.11531\
+> summary(normalized_counts) # Check\
+ Pca_Ribes_rep1      Pca_Ribes_rep2     Pca_Ribes_rep3      Pca_Ribes_rep4     Pca_Ribes_rep5      Pca_Ribes_rep6    \
+ Min.   :     0.00   Min.   :     0.0   Min.   :     0.00   Min.   :    0.00   Min.   :     0.00   Min.   :    0.00  \
+ 1st Qu.:     8.11   1st Qu.:     7.7   1st Qu.:     8.00   1st Qu.:    9.87   1st Qu.:     8.22   1st Qu.:    9.84  \
+ Median :    35.92   Median :    34.5   Median :    35.45   Median :   37.98   Median :    35.61   Median :   38.52  \
+ Mean   :   452.24   Mean   :   510.2   Mean   :   503.33   Mean   :  206.75   Mean   :   349.29   Mean   :  226.07  \
+ 3rd Qu.:   125.43   3rd Qu.:   127.6   3rd Qu.:   124.64   3rd Qu.:  128.37   3rd Qu.:   127.82   3rd Qu.:  123.76  \
+ Max.   :277049.17   Max.   :329431.1   Max.   :312669.51   Max.   :42186.17   Max.   :201236.29   Max.   :61620.99  \
+ Pca_Ribes_rep7     Pca_Ribes_rep8     Pca_Ribes_rep9     Pca_Salix_rep1      Pca_Salix_rep2     Pca_Salix_rep3     \
+ Min.   :     0.0   Min.   :     0.0   Min.   :     0.0   Min.   :     0.00   Min.   :     0.0   Min.   :     0.00  \
+ 1st Qu.:     7.6   1st Qu.:     8.3   1st Qu.:     7.9   1st Qu.:     8.09   1st Qu.:     9.3   1st Qu.:     9.13  \
+ Median :    32.6   Median :    34.6   Median :    33.4   Median :    35.85   Median :    36.2   Median :    36.53  \
+ Mean   :   623.2   Mean   :   541.9   Mean   :   697.7   Mean   :   476.08   Mean   :   446.6   Mean   :   270.85  \
+ 3rd Qu.:   124.4   3rd Qu.:   121.7   3rd Qu.:   129.8   3rd Qu.:   127.20   3rd Qu.:   127.1   3rd Qu.:   125.40  \
+ Max.   :412347.5   Max.   :543980.7   Max.   :539027.8   Max.   :239349.05   Max.   :323801.8   Max.   :178250.82  \
+ Pca_Salix_rep4      Pca_Salix_rep5      Pca_Salix_rep6      Pca_Salix_rep7      Pca_Salix_rep8      Pca_Salix_rep9     \
+ Min.   :     0.00   Min.   :     0.00   Min.   :     0.00   Min.   :     0.00   Min.   :     0.00   Min.   :     0.00  \
+ 1st Qu.:     9.24   1st Qu.:     9.73   1st Qu.:    10.70   1st Qu.:     9.72   1st Qu.:     8.67   1st Qu.:     8.94  \
+ Median :    36.43   Median :    37.71   Median :    37.82   Median :    37.90   Median :    36.11   Median :    35.74  \
+ Mean   :   482.05   Mean   :   472.37   Mean   :   299.87   Mean   :   397.05   Mean   :   520.91   Mean   :   532.36  \
+ 3rd Qu.:   126.50   3rd Qu.:   127.72   3rd Qu.:   122.03   3rd Qu.:   124.41   3rd Qu.:   124.21   3rd Qu.:   126.59  \
+ Max.   :294660.40   Max.   :290541.91   Max.   :176834.44   Max.   :199775.68   Max.   :277599.76   Max.   :306187.06  \
+ Pca_Urtica_rep1     Pca_Urtica_rep2    Pca_Urtica_rep3     Pca_Urtica_rep4    Pca_Urtica_rep5     Pca_Urtica_rep6    \
+ Min.   :     0.00   Min.   :    0.00   Min.   :     0.00   Min.   :    0.00   Min.   :     0.00   Min.   :     0.00  \
+ 1st Qu.:     9.87   1st Qu.:   10.11   1st Qu.:     9.25   1st Qu.:   11.54   1st Qu.:     9.95   1st Qu.:     9.95  \
+ Median :    38.07   Median :   38.05   Median :    36.29   Median :   40.08   Median :    37.50   Median :    38.00  \
+ Mean   :   283.86   Mean   :  203.35   Mean   :   259.19   Mean   :  197.26   Mean   :   351.40   Mean   :   365.76  \
+ 3rd Qu.:   120.03   3rd Qu.:  117.13   3rd Qu.:   119.56   3rd Qu.:  121.46   3rd Qu.:   120.14   3rd Qu.:   124.85  \
+ Max.   :158769.01   Max.   :73112.56   Max.   :155620.94   Max.   :45516.25   Max.   :158240.67   Max.   :210455.39  \
+ Pca_Urtica_rep7     Pca_Urtica_rep8     Pca_Urtica_rep9    \
+ Min.   :     0.00   Min.   :     0.00   Min.   :     0.00  \
+ 1st Qu.:     8.90   1st Qu.:     9.32   1st Qu.:    10.12  \
+ Median :    36.86   Median :    36.26   Median :    37.09  \
+ Mean   :   229.38   Mean   :   381.20   Mean   :   408.77  \
+ 3rd Qu.:   119.48   3rd Qu.:   121.21   3rd Qu.:   121.38  \
+ Max.   :111673.05   Max.   :232455.96   Max.   :226764.97  \
+\
+> head(res_table) # Check\
+log2 fold change (MLE): condition Urtica vs Ribes \
+Wald test p-value: condition Urtica vs Ribes \
+DataFrame with 6 rows and 6 columns\
+               baseMean log2FoldChange     lfcSE      stat      pvalue        padj\
+              <numeric>      <numeric> <numeric> <numeric>   <numeric>   <numeric>\
+Polcal_g14648   151.939       -7.88699  0.641400  -12.2965 9.45626e-35 9.72482e-31\
+Polcal_g13164  1257.533       -4.43625  0.363212  -12.2139 2.61893e-34 1.34665e-30\
+Polcal_g15160 22471.087       -8.32707  0.687749  -12.1077 9.61437e-34 3.29580e-30\
+Polcal_g15180  1752.848       -6.49662  0.549751  -11.8174 3.17342e-32 8.15887e-29\
+Polcal_g3216   2089.327       -5.39265  0.463776  -11.6277 2.98022e-31 6.12971e-28\
+Polcal_g13159   565.357       -5.65896  0.529847  -10.6804 1.25757e-26 2.15547e-23}

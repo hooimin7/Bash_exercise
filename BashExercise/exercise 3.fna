@@ -1,0 +1,37 @@
+Question 3.1
+$ cat paxillus.fna |grep -v ">" | grep -o -i -n "A\|T\|G\|C" | wc -l
+101000000
+$ cat paxillus.fna |grep -v ">" | grep -o -i -n "G\|C" | wc -l
+53130297
+$ GC=53130297
+(base) [inf-51-2023@bioinf-biol302451 ~]$ Tot=101000000
+(base) [inf-51-2023@bioinf-biol302451 ~]$ echo "scale=6; $((GC))/$((Tot))*100" | bc
+52.604200
+
+
+Question 3.2
+$ grep -o -i "GAAGTC" paxillus.fna | wc -l
+33976
+
+
+Question 3.3
+$ cat paxillus.fna | grep "^>" | cut -d " " -f 1 | tr -d ">" | tr "\n" " " > header.txt 
+cat header.txt | grep -o ":" | wc -l
+6000000
+$ cat header.txt | grep -o " " | wc -l
+1000000
+There is one line
+$ colon=6000000
+$ sc=1000000
+$ li=1
+
+$ echo $(("colon"+"sc"+"li"))
+7000001
+
+
+Question 3.4
+$ echo $PATH
+/home/inf-51-2023/anaconda3/bin:/home/inf-51-2023/anaconda3/condabin:/home/inf-51-2023/.local/bin:/home/inf-51-2023/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/inf-51-2023/bin:/home/inf-51-2023/bin
+
+$ echo $PATH | tr ":" "\n" | wc -l
+10

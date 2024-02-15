@@ -1,0 +1,110 @@
+ cd
+➜  mkdir bin
+cd bin
+➜  bin
+bin nano
+➜  bin ls
+test.sh
+➜  bin echo Hello world
+Hello world
+➜  bin chmod +x test.sh
+➜  bin ls
+test.sh
+➜  bin echo $PATH
+/Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+cd bin
+➜  bin nano ./test.sh
+➜  bin echo $PATH
+/Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+bin ls
+test.sh
+➜  bin ./test.sh
+Hello world
+bin nano ./test.sh
+➜  bin ls -a
+.       ..      test.sh
+bin nano ./test.sh
+➜  bin ls -a
+.       ..      test.sh
+➜  bin source ./test.sh
+Hello world
+➜  bin echo $PATH
+/Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:./bin
+
+BashExercise ls -l -h paxillus.fna
+-rw-r--r--@ 1 med-snt  staff   148M Sep 27 20:50 paxillus.fna
+
+gunzip paxillus . fna . gz # decompress
+ls -l -h paxillus . fna
+# the gz extension disappears after decompression
+less paxillus . fna # Take a look at the file , end with q 
+
+head -10000 paxillus . fna > first5000 . fna
+2 tail -10000 paxillus . fna > last5000 . fna
+3 tar - cvf 10000. fna .tar first5000 . fna last5000 . fna
+
+tar - cvf is the same as tar -c -v -f
+2 ls - lh is the same as ls -l -h
+-c means create an archive, -v is verbose (print info to the screen), -f shows
+that the next argument is the name of the file holding the archive. The list
+has to end with -f. The archive should end with the file extension .tar.
+Look at the files in the archive (-t means list the files)
+tar - tf 10000. fna .tar
+Now we combine tar with compression (this is the equivalent to zip in Win-
+dows; zip and unzip are also found in Linux, see below)
+tar - cvzf 10000. fna . tgz first5000 . fna last5000 . fna
+
+BashExercise tar -tf 10000.fna.tar
+first5000.fna
+last5000.fna
+BashExercise ls -l first5000.fna last5000.fna 10000.fna.tar
+-rw-r--r--  1 med-snt  staff  1553408 Oct  1 22:12 10000.fna.tar
+-rw-r--r--  1 med-snt  staff   772685 Oct  1 22:10 first5000.fna
+-rw-r--r--  1 med-snt  staff   777838 Oct  1 22:11 last5000.fna
+
+compress
+Now we combine tar with compression (this is the equivalent to zip in Win-
+dows; zip and unzip are also found in Linux, see below
+BashExercise tar -cvzf 10000.fna.tgz first5000.fna last5000.fna
+a first5000.fna
+a last5000.fna
+BashExercise ls -l first5000.fna last5000.fna 10000.fna.tar 10000.fna.tgz
+-rw-r--r--  1 med-snt  staff  1553408 Oct  1 22:12 10000.fna.tar
+-rw-r--r--  1 med-snt  staff   395668 Oct  1 22:19 10000.fna.tgz
+-rw-r--r--  1 med-snt  staff   772685 Oct  1 22:10 first5000.fna
+-rw-r--r--  1 med-snt  staff   777838 Oct  1 22:11 last5000.fna
+The file extension tar.gz is sometimes used instead of tgz.
+tar - xvf 10000. fna .tar # For uncompressed data
+tar - xvzf 10000. fna . tgz # For compressed data
+
+-x stands for extract. Again, notice that when you use gzip or gunzip the
+original file is deleted.
+BashExercise tar -xvf 10000.fna.tar
+x first5000.fna
+x last5000.fna
+ BashExercise tar -xvzf 10000.fna.tgz
+x first5000.fna
+x last5000.fna
+BashExercise ls -a
+                Exercise5quiz_1 file2.fna       list2_1.txt     regions.fna
+.               Exercise5quiz_2 first5000.fna   list3.txt
+..              exercise 3.fna  last5000.fna    list3_1.txt
+10000.fna.tar   exercise5.fna   list1.txt       listOfItems.txt
+10000.fna.tgz   file1.fna       list2.txt       paxillus.fna
+Not so with tar, the original files remain in the
+directory. With the two last tar commands we overwrote the existing files
+
+Then finally the zip commands:
+echo abcdefghi > alphabet . txt # create a file
+zip alphabet alphabet . txt # the output file is
+alphabet . zip
+ls -l alphabet *
+rm alphabet . txt
+unzip alphabet .zip
+ls -l alphabet *
+
+Observe that the .zip extension is added automatically. If you want to zip
+an entire directory, add -r:
+cd # Go home
+zip -r binCompressed bin
